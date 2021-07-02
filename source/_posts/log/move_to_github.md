@@ -29,6 +29,25 @@ slug: "move_to_github"
 
 在`source`目录下面新建目录`_data`，新建一个`yun.yml`，按照主题说明文档来改就可以。
 
+安装的必要插件和额外依赖库：
+
+```shell
+# 渲染器
+npm install hexo-render-pug hexo-renderer-stylus --save
+# 标签
+npm install hexo-generator-tag
+# 分类
+npm install hexo-generator-category
+# 部署
+npm install hexo-deployer-git
+# 字数统计
+npm install hexo-wordcount
+# RSS
+npm install hexo-generator-feed --save
+```
+
+暂时就这些，要用到别的以后还可以再配嘛。
+
 ## 启用GitHub Pages
 
 这个就不多说了，建仓库开Pages服务还有域名解析。域名解析记录可以直接用**CNAME**指向GitHub给的默认域名。

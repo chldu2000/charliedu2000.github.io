@@ -106,3 +106,10 @@ deploy:
   repo: https://github.com/charliedu2000/charliedu2000.github.io
   branch: main # 默认使用 master 分支
   message: Update Hexo Static Content # 你可以自定义此次部署更新的说明
+
+aplayer:
+  cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js
+  style_cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css
+  meting: true
+  meting_cdn: https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js
+  asset_inject: false
