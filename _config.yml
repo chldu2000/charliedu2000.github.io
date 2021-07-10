@@ -7,7 +7,7 @@ title: 愚人而已
 subtitle: '以愚者之名攀上顶峰'
 description: ''
 keywords:
-author: 零歌
+author: 零歌Charlie
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -104,7 +104,7 @@ theme: yun
 deploy:
   type: git
   repo: https://github.com/charliedu2000/charliedu2000.github.io
-  branch: main # 默认使用 master 分支
+  branch: main # 使用 main 分支
   message: Update Hexo Static Content # 你可以自定义此次部署更新的说明
 
 aplayer:

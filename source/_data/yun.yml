@@ -55,6 +55,10 @@ banner:
     enable: true
 
 pages:
+  - name: 旁友们
+    url: /links/
+    icon: icon-genderless-line
+    color: dodgerblue
 
 reward:
   enable: false
@@ -66,7 +70,36 @@ wordcloud:
   enable: true
 
 comment:
-  enable: false
+  enable: true
+  icon: icon-chat-3-line
+  tips:
+    - 留个爪印吧~
+
+valine:
+  enable: true
+  appId: Cl6JiHgnh6T2EqGvh2qujibV-gzGzoHsz
+  appKey: qb1Bko4vgqbXLNip5YIqvwXt
+  placeholder: 这里这里，网址可以不填
+  avatar: # gravatar style
+  meta:
+    - nick
+    - mail
+    - link
+  pageSize: 10 # pagination size
+  visitor: false
+  highlight: true
+  recordIP: false
+  enableQQ: true
+  requiredFields:
+    - nick
+    - mail
+  # serverURLs:
+  # Emoji See: https://valine.js.org/emoji.html
+  # emojiCDN: //i0.hdslb.com/bfs/emote/
+  # emojiMaps:
+  #   tv_doge: 6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png
+  #   more...
+  # lang: zh-CN
 
 wordcount:
   enable: true
