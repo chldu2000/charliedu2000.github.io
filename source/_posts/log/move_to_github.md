@@ -11,6 +11,8 @@ slug: "move_to_github"
 
 原因很简单，为了节省服务器经费~~（钱包空空）~~，服务器摆在那里，资源也没有充分利用起来。
 
+<!-- more -->
+
 ## 导出
 
 把文章从Typecho导出到Hugo主要是通过这个插件来完成的：[Typecho 博客文章导出至 Hugo 插件](https://github.com/lizheming/typecho-export-hugo)。

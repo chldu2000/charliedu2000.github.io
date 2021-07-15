@@ -13,6 +13,8 @@ date: "2021-05-15 00:12:00"
 
 看起来蛮有趣的，~~空调房最适合摸鱼了~~。
 
+<!-- more -->
+
 <iframe height=800 src="https://ac.yunyoujun.cn"></iframe>
 
 ## 空调维修

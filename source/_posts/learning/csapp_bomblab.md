@@ -7,13 +7,13 @@ slug: "74"
 date: "2021-05-14 23:52:00"
 ---
 
-# 拆掉邪恶博士的炸弹
+## 拆掉邪恶博士的炸弹
 
 > 这是一个课程实验，感觉有点意思，就记录一下吧。
 > 
 > 分析可能不准确，仅供参考。
 
-## 邪恶博士的幽默感
+### 邪恶博士的幽默感
 
 ```
 /***************************************************************************
@@ -43,7 +43,9 @@ date: "2021-05-14 23:52:00"
 
 由于我们并没有完整的源代码，只能通过汇编代码来尝试推出博士~~这个邪恶的刀客塔~~到底在炸弹里做了些什么手脚了。
 
-## 第一关
+<!-- more -->
+
+### 第一关
 
 ```
 /* Hmm...  Six phases must be more secure than one phase! */
@@ -78,7 +80,7 @@ date: "2021-05-14 23:52:00"
 
 ![phase1](https://i.loli.net/2021/06/05/xodRVhpKkq7BUI5.jpg)
 
-## 第二关
+### 第二关
 
 ```
 /* The second phase is harder.  No one will ever figure out
@@ -129,7 +131,7 @@ date: "2021-05-14 23:52:00"
 
 ![phase2](https://i.loli.net/2021/06/05/yXM4Omd15wWbu8V.jpg)
 
-## 第三关
+### 第三关
 
 ```
 /* I guess this is too easy so far.  Some more complex code will
@@ -201,7 +203,7 @@ date: "2021-05-14 23:52:00"
 
 ![phase3](https://i.loli.net/2021/06/05/kXyj7TLxtaJEIB3.jpg)
 
-## 第四关
+### 第四关
 
 ```
 /* Oh yeah?  Well, how good is your math?  Try on this saucy problem! */
@@ -317,7 +319,7 @@ int func4(int x, int y) {
 
 ![phase4](https://i.loli.net/2021/06/05/EhNXclznmLyHFGs.jpg)
 
-## 第五关
+### 第五关
 
 ```
 /* Round and 'round in memory we go, where we stop, the bomb blows! */
@@ -372,7 +374,7 @@ int func4(int x, int y) {
 
 ![phase5](https://i.loli.net/2021/06/05/rig7bMAeZzaQyk1.jpg)
 
-## 第六关
+### 第六关
 
 ```
 /* This phase will never be used, since no one will get past the
@@ -519,7 +521,7 @@ int func4(int x, int y) {
 
 ![phase6](https://i.loli.net/2021/06/05/4yp7FVA1wiEMkrI.jpg)
 
-## 隐藏关卡
+### 隐藏关卡
 
 看起来我们已经解决了所有问题，但是事情好像并不像我们想得那么简单。
 
@@ -532,7 +534,7 @@ int func4(int x, int y) {
 
 发现汇编代码中存在`secret_phase`，但是之前的过程并没有用到，猜测它是一个隐藏关卡。
 
-### 进入条件
+#### 进入条件
 
 为了找到进入该关卡的条件，在汇编代码中寻找`secret_phase`，发现只有`phase_defused`调用了该函数。
 
@@ -601,7 +603,7 @@ int func4(int x, int y) {
 
 ![enter-sp](https://i.loli.net/2021/06/05/CRqUj6n8Ki7ZlDd.jpg)
 
-### 分析secret_phase
+#### 分析secret_phase
 
 ```
 08048e87 <secret_phase>:
@@ -725,7 +727,7 @@ int func4(int x, int y) {
 
 ![sp](https://i.loli.net/2021/06/05/oSlURyD4XP8NbhZ.jpg)
 
-## 通关
+### 通关
 
 ![victory](https://i.loli.net/2021/06/05/TpuSW5DxAa8yQje.jpg)
 
