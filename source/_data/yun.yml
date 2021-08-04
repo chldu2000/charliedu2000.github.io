@@ -90,3 +90,9 @@ post_meta:
   updated_at: false
   categories: true
   tags: true
+
+codeblock:
+  copy_btn: true
+  prismjs:
+    light: default
+    dark: tomorrow
