@@ -113,13 +113,12 @@ public interface MyList<E> {
 
 顾名思义，`ArrayList` 就是应该用数组来存储数据。嗯，没错！
 
-那我们给一个数组，顺便用几个数分别表示数组中非空部分的大小、总长度和允许的最大最小长度。
+那我们给一个数组，顺便用几个数分别表示数组中元素个数和允许的最大最小长度。
 
 ```java
 public class MyArrayList<E> implements MyList<E> {
 	
 	private int size;
-	private int length;
 	public final int MIN_LENGTH = 10;
 	public final int MAX_LENGTH = Integer.MAX_VALUE;
 	
@@ -135,7 +134,6 @@ public MyArrayList(int arrLength) {
 		arrLength = MIN_LENGTH;
 	}
 	Object[] newValues = new Object[arrLength];
-	length = arrLength;
 	size = 0;	
 	values = newValues;
 }
@@ -159,6 +157,7 @@ public int size() {
 ```java
 @Override
 public void add(E value) {
+	int length = values.length;
 	if(size >= length) {
 		int newLength = (length >> 1) + length;
 		if(newLength < 0) {
@@ -168,7 +167,6 @@ public void add(E value) {
 		for(int i = 0; i < length; i ++) {
 			newValues[i] = values[i];
 		}
-		length = newLength;
 		values = newValues;
 	}
 	values[size++] = value;
@@ -195,7 +193,6 @@ public void addAll(MyList<E> list) {
 	for(int i = aSize; i < newSize; i ++) {
 		newValues[i] = list.get(i - aSize);
 	}
-	this.length = newSize;
 	this.size = newSize;
 	this.values = newValues;
 }
@@ -221,7 +218,6 @@ public void addAll(E[] list) {
 	for(int i = aSize; i < newSize; i ++) {
 		newValues[i] = list[i - aSize];
 	}
-	this.length = newSize;
 	this.size = newSize;
 	this.values = newValues;
 }
