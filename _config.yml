@@ -103,10 +103,9 @@ theme: yun
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://q3cJDz0EFJHgQ395xhteSookC1KYjgUh8Ye6FLjXAYM@github.com/charliedu2000/charliedu2000.github.io
+  repo: https://charliedu2000@github.com/charliedu2000/charliedu2000.github.io
   branch: main # 使用 main 分支
   message: Update Hexo Static Content # 你可以自定义此次部署更新的说明
-  #token: q3cJDz0EFJHgQ395xhteSookC1KYjgUh8Ye6FLjXAYM
 
 aplayer:
   cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js
