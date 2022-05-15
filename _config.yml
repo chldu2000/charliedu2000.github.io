@@ -105,7 +105,7 @@ deploy:
   type: git
   repo: https://charliedu2000@github.com/charliedu2000/charliedu2000.github.io
   branch: main # 使用 main 分支
-  message: Update Hexo Static Content # 你可以自定义此次部署更新的说明
+  message: Update Hexo Static Content # 部署更新的说明
 
 aplayer:
   cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js
