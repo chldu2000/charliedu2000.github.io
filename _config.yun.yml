@@ -10,43 +10,43 @@ social:
     # set rss in your root config
     # https://github.com/hexojs/hexo-generator-feed
     link: /atom.xml # config.feed.path
-    icon: icon-rss-line
+    icon: ri:rss-line
     color: orange
   - name: GitHub
     link: https://github.com/charliedu2000
-    icon: icon-github-line
+    icon: ri:github-line
     color: "#6e5494"
   - name: 网易云音乐
     link: https://music.163.com/#/user/home?id=610609902
-    icon: icon-netease-cloud-music-line
+    icon: ri:netease-cloud-music-line
     color: "#C20C0C"
   - name: 哔哩哔哩
     link: https://space.bilibili.com/22660607
-    icon: icon-bilibili-line
+    icon: ri:bilibili-line
     color: "#FF8EB3"
   - name: E-Mail
     link: mailto:charliedu2000@hotmail.com
-    icon: icon-mail-line
+    icon: ri:mail-line
     color: "#8E71C1"
 
 menu:
   home:
     path: /
-    icon: icon-home-4-line
+    icon: ri:home-4-line
   list:
     - type: archives
       path: /archives/
-      icon: icon-archive-line
+      icon: ri:archive-line
     - type: categories
       path: /categories/
-      icon: icon-folder-2-line
+      icon: ri:folder-2-line
     - type: tags
       path: /tags/
-      icon: icon-price-tag-3-line
+      icon: ri:price-tag-3-line
   custom:
     title: 文档
     path: https://yun.yunyoujun.cn
-    icon: icon-settings-line
+    icon: ri:settings-line
 
 banner:
   enable: true
@@ -57,7 +57,7 @@ banner:
 pages:
   - name: 旁友们
     url: /links/
-    icon: icon-genderless-line
+    icon: ri:genderless-line
     color: dodgerblue
 
 reward:
@@ -71,7 +71,7 @@ wordcloud:
 
 comment:
   enable: true
-  icon: icon-chat-3-line
+  icon: ri:chat-3-line
   tips:
     - 留个爪印吧~
 
