@@ -103,7 +103,7 @@ theme: yun
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://charliedu2000@github.com/charliedu2000/charliedu2000.github.io
+  repo: git@github.com:charliedu2000/charliedu2000.github.io.git #https://charliedu2000@github.com/charliedu2000/charliedu2000.github.io
   branch: main # 使用 main 分支
   message: Update Hexo Static Content # 部署更新的说明
 

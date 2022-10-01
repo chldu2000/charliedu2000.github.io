@@ -96,3 +96,8 @@ codeblock:
   prismjs:
     light: default
     dark: tomorrow
+
+katex:
+  copy_tex: true # 复制 KaTeX 文本
+  global: false # 全局启用
+  options: {}
