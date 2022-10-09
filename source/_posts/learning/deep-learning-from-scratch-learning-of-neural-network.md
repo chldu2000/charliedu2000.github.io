@@ -72,3 +72,71 @@ def mean_squared_error(y, t):
 公式如下：
 
 $$ E = - \sum \limits_k t_k \log y_k $$
+
+其中 $\log$ 表示 $\log_e$，$y_k$ 是神经网络的输出，$t_k$ 是正确解的标签（独热编码）。显然上式只会计算正确解标签的输出的自然对数（因为只有正确解标签的索引为1），也就是说交叉熵误差的值是由正确解标签所对应的输出结果决定的。
+
+自然对数 $y = \log x$ 的图像如下：
+
+![自然对数 y = log x 的图像](https://s2.loli.net/2022/10/09/3dHoWFkPCrpvBGh.png)
+
+那么可以看出正确解标签对应的输出为1时，交叉熵误差的输出为0，输出越小，交叉熵误差的结果越大。
+
+实现方式：
+
+```python
+# 交叉熵误差
+def cross_entropy_error(y, t):
+    delta = 1e-7
+    return -np.sum(t * np.log(y + delta))  # 防止出现 log(0) 无限大
+```
+
+计算例子：
+
+```pycon
+>>> t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+>>> y = [0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]
+>>> cross_entropy_error(np.array(y), np.array(t))
+0.51082545709933802
+>>>
+>>> y = [0.1, 0.05, 0.1, 0.0, 0.05, 0.1, 0.0, 0.6, 0.0, 0.0]
+>>> cross_entropy_error(np.array(y), np.array(t))
+2.3025840929945458
+```
+
+#### mini-batch 学习
+
+所谓使用训练数据进行学习，就是针对训练数据计算损失函数的值，找出使该值尽可能小的参数。计算损失函数时必须将所有的训练数据作为对象，考虑所有训练数据的损失函数的总和。
+
+以交叉熵误差为例，如果要计算所有训练数据的损失函数的总和，可以这样：
+
+$$ E = - \frac{1}{N} \sum \limits_n \sum \limits_k t_{nk} \log y_{nk} $$
+
+N 自然是数据个数，$y_{nk}$ 是神经网络的输出中第 n 个数据的第 k 个元素的值，$t_{nk}$ 则是对应的监督数据。观察可以发现这里其实就是把单个数据的损失函数的公式扩大到了 N 个数据，随后除以 N 正规化处理。这个式子也可以说是“平均损失函数”。
+
+在数据集比较大的情况下（比如之前用到的 MNIST 数据集，训练数据就有60000个），根据所有的训练数据来算损失函数的和代价就太大了。实际操作中一般是从全部数据中选出一部分作为全部数据的“近似”（**mini-batch**），用这些数据进行学习（mini-batch 学习）。比方说从60000个训练数据中随机选择100笔，在用这100笔数据进行学习。
+
+（按我的理解，书上这里的说法应该是用样本代表整体。搜到的比较多的说法是将一批所有数据再分成若干份，称作 mini-batch，训练时一次更新一个 mini-batch，整个数据集会更新多次，最终还是使用了所有数据。）
+
+随机抽取数据时可以利用 `np.random.choice()`，像这样：
+
+```python
+train_size = x_train.shape[0]  # 对于 MNIST 的训练数据，是60000
+batch_size = 10
+batch_mask = np.random.choice(train_size, batch_size)  # 在0到59999之间随机选择10个数，得到包含被选数据的索引的数组
+x_batch = x_train[batch_mask]  # 被选测试数据
+t_batch = t_train[batch_mask]  # 被选测试数据的标签
+```
+
+如果要实现 mini-batch 的交叉熵误差，可以这样：
+
+```python
+def cross_entropy_error(y, t):
+    # 只有一个数据的时候改变数据形状
+    if y.ndim == 1:
+        t = t.reshape(1, t.size)
+        y = y.reshape(1, y.size)
+ 
+    batch_size = y.shape[0]
+    return -np.sum(t * np.log(y + 1e-7)) / batch_size
+```
+
