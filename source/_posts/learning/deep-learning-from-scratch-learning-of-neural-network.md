@@ -154,6 +154,8 @@ def cross_entropy_error(y, t):
 
 ## 数值微分
 
+~~这里引入数值微分的方法，用它计算导数和偏导数。~~
+
 ### 导数
 
 导数的概念应该不用多说，就算高数渣如我也应该有所认识……简单来说就是“瞬间的变化量”。
@@ -166,8 +168,134 @@ def numerical_diff(f, x):
     return (f(x+h) - f(x-h)) / (2*h) # 使用中心差分来计算
 ```
 
+使用例，有函数 $f(x) = 0.01 x^2 + 0.1 x$：
+
+```python
+def function_1(x):
+    return 0.01*x**2 + 0.1*x  # 0.01x^2 + 0.1x
+```
+
+求其在 $x=x_0$ 处的导数：
+
+```pycon
+>>> numerical_diff(function_1, x0)
+```
+
 > 利用微小的差分求导数的过程称为数值微分，而基于数学式的推导求导数的过程，则用“解析性”（analytic）一词，称为“解析性求解”或者“解析性求导”。
 
 ### 偏导数
 
+一个多变量的函数，关于其中一个变量求导数，其他变量恒定。~~应该不用再解释……~~
+
+计算偏导的例子，有函数 $f(x_0, x_1) = x_0^2 + x_1^2$：
+
+```python
+def function_2(x):
+    return np.sum(x**2)
+```
+
+求 $x_0 = 3$，$x_1 = 4$ 时，关于 $x_0$ 的偏导数 $\frac{\partial f}{\partial x_0}$：
+
+```pycon
+>>> def function_tmp1(x0):
+...     return x0*x0 + 4.0**2.0
+...
+>>> numerical_diff(function_tmp1, 3.0)
+```
+
+~~求关于 $x_1$ 的偏导数也是差不多的方法。~~
+
 ## 梯度
+
+前面按变量分别求偏导，如果把全部变量的偏导数汇总成向量，就是**梯度**。求梯度的实现方法可以是这样，非批处理：
+
+```python
+# 求梯度
+def numerical_gradient(f, x):
+    h = 1e-4  # 0.0001
+    grad = np.zeros_like(x)  # 生成和 x 形状相同、元素都为0的数组
+
+    for idx in range(x.size):
+        tmp_val = x[idx]
+        # 计算 f(x+h)
+        x[idx] = tmp_val + h
+        fxh1 = f(x)
+
+        # 计算 f(x-h)
+        x[idx] = tmp_val - h
+        fxh2 = f(x)
+
+        # 算出偏导，还原 x
+        grad[idx] = (fxh1 - fxh2) / (2*h)
+        x[idx] = tmp_val
+
+    return grad
+```
+
+这里求梯度用的方法其实和前面求单个变量的数值微分所用的方法没有什么区别……按照[作者给出的方法](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_2d.py)（里面实现了批处理计算梯度）可以画出 $f(x_0, x_1) = x_0^2 + x_1^2$ 的负梯度：
+
+![函数的负梯度](https://s2.loli.net/2022/10/14/XjxmfqakndbtHrc.png)
+
+~~函数图像可看做下凹的曲面，负梯度会指向最低点，更好理解梯度在这里的作用吧……~~在这个图中，离函数最小值越远，梯度向量的模就越大（变化越快），且向量都指向了“最低处”。而一般来说，“梯度”指向该点处函数值减小最多的方向。
+
+### 梯度法
+
+神经网络需要在学习过程中找到最优参数（权重和偏置），也就是使损失函数取最小值时的参数。损失函数很复杂的时候就难以找到最小值所在的“点”，但是可以根据梯度表示的“变化快慢”来寻找尽可能小的值。不过梯度反映的是各点处函数值减小最多的方向，并不一定能找到最小值：梯度为0的点除了最小值还有极小值和鞍点。尽管如此，沿着梯度方向也能最大限度地减小函数值，所以可以沿着梯度方向寻找尽可能小的值。
+
+> 在梯度法中，函数的取值从当前位置沿着梯度方向前进一定距离，然后在新的地方重新求梯度，再沿着新梯度方向前进，如此反复，不断地沿梯度方向前进。像这样，通过不断地沿梯度方向前进，逐渐减小函数值的过程就是**梯度法**（gradient method）。梯度法是解决机器学习中最优化问题的常用方法，特别是在神经网络的学习中经常被使用。
+
+寻找最小值的梯度法叫做梯度下降法，寻找最大值的梯度法叫做梯度上升法。反转损失函数的符号，两类问题就可以互相转化。在神经网络中，梯度法主要指梯度下降法。
+
+对于函数 $f(x_0, x_1) = x_0^2 + x_1^2$，用数学式表示梯度法：
+
+$$ x_0 = x_0 - \eta \frac{\partial f}{\partial x_0} \\\ \\\ x_1 = x_1 - \eta \frac{\partial f}{\partial x_1} $$
+
+上式中 $\eta$ 表示更新量（**学习率**），它决定了在一次学习中应该学习多少以及应该在多大程度上更新参数。这组式子表示更新一次，学习时反复执行这个步骤减小函数值。变量数量增加后方法也是类似的。
+
+学习率需要事先确定，过大或过小都无法取得理想的结果。在学习过程中一般会一边改变学习率，一边观察学习是否正确进行。
+
+使用梯度下降法的例子（`numerical_gradient` 的实现参考[这里](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_2d.py)）：
+
+```python
+import numpy as np
+import sys
+import os
+
+sys.path.append(os.curdir)
+
+from ch04.gradient_2d import numerical_gradient
+
+
+def function_2(x):
+    return x[0]**2 + x[1]**2
+
+
+# f: 函数
+# init_x: 初始值
+# lr: 学习率
+# step_num： 梯度法重复次数
+def gradient_descent(f, init_x, lr=0.01, step_num=100):
+    x = init_x
+
+    for i in range(step_num):  # 反复执行更新
+        grad = numerical_gradient(f, x)
+        x -= lr * grad
+
+    return x
+
+
+init_x = np.array([-3.0, 4.0])
+print(gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))
+```
+
+输出：
+
+```bash
+[-6.11110793e-10  8.14814391e-10]
+```
+
+上面设初始值为 `(-3.0, 4.0)`，用梯度法寻找最小值，得到的结果很接近函数的最小值点 `(0, 0)`。如果学习率不合适，得到的结果就会偏离更远。事实上，学习率过大时结果会过度发散，学习率太小时参数更新幅度太小，也很难得到合适的结果。
+
+> 像学习率这样的参数称为超参数。这是一种和神经网络的参数（权重和偏置）性质不同的参数。相对于神经网络的权重参数是通过训练数据和学习算法自动获得的，学习率这样的超参数则是人工设定的。一般来说，超参数需要尝试多个值，以便找到一种可以使学习顺利进行的设定。
+
+### 神经网络的梯度
