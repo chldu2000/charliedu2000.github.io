@@ -9,8 +9,6 @@ date: 2022-10-07 23:18:35
 katex: true
 ---
 
-**施工中……**
-
 内容参考：
 
 - 《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)
@@ -466,4 +464,138 @@ class TwoLayerNet:
         grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
 
         return grads
+```
+
+（`weight_init_std` 似乎是为了解决激活后分布集中在0和1附近？）
+
+之前也提到过，根据数据集和要识别的目标，`input_size` 就是`784`，`output_size` 是`10`。这里的隐藏层神经元个数设置为一个合理的值就行。
+
+### mini-batch 的实现
+
+实现过程如下：
+
+```python
+import sys, os
+import numpy as np
+
+sys.path.append(os.curdir)
+
+from ch04.two_layer_net import TwoLayerNet
+from dataset.mnist import load_mnist
+
+print('Load mnist dataset...')
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True,
+                                                  one_hot_label=True)
+
+train_loss_list = []
+
+# 超参数
+iters_num = 10000  # 梯度法更新次数
+train_size = x_train.shape[0]  # 训练集大小
+batch_size = 100  # batch 大小
+learning_rate = 0.1  # 学习率
+
+print('Initialize network...')
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+for i in range(iters_num):
+    # 从训练数据中随机获取 mini-batch
+    print(i, ': choose mini-batch...')
+    batch_mask = np.random.choice(train_size, batch_size)
+    x_batch = x_train[batch_mask]
+    t_batch = t_train[batch_mask]
+
+    # 计算梯度
+    print(i, ': calculate grads...')
+    grad = network.numerical_gradient(x_batch, t_batch)
+
+    # 更新参数
+    print(i, ': update params...')
+    for key in ('W1', 'b1', 'W2', 'b2'):
+        network.params[key] -= learning_rate * grad[key]
+
+    # 记录学习过程
+    loss = network.loss(x_batch, t_batch)
+    train_loss_list.append(loss)
+```
+
+上面的学习过程应该算很清楚了，共更新10000次参数，会记录每一次训练后的损失函数值。
+
+### 基于测试数据的评价
+
+上面的学习过程得到的损失函数值其实是对训练数据的某个 mini-batch 的损失函数值，这个值减小说明学习过程确实在正常进行，但是不能保证神经网络能正确识别训练集以外的数据。要评价神经网络的泛化能力，就要使用不在训练集中的数据。
+
+这里就涉及了 **epoch**（之前做比赛看队友的代码里出现过这个东西，不过当时不知道具体表示什么意思），一个 epoch 表示学习中所有训练数据均被使用过一次时的更新次数。比如对于10000笔训练数据，如果 mini-batch 的大小是100，那么重复梯度下降100次，所有的训练数据就都被使用过一次，此时100次就是一个 epoch。（一般的做法是把训练数据打乱，根据指定的批大小生成 mini-batch，遍历所有 mini-batch 完成一个 epoch。像前面直接每次随机选择不能保证每个数据都被用到。）
+
+在学习过程中需要定期对训练数据和测试数据记录识别精度，这里每经过一个 epoch 就记录一次：
+
+```python
+import sys, os
+import numpy as np
+
+sys.path.append(os.curdir)
+
+from ch04.two_layer_net import TwoLayerNet
+from dataset.mnist import load_mnist
+
+print('Load mnist dataset...')
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True,
+                                                  one_hot_label=True)
+
+print('Initialize network...')
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+# 超参数
+iters_num = 10000  # 梯度法更新次数
+train_size = x_train.shape[0]  # 训练集大小
+batch_size = 100  # batch 大小
+learning_rate = 0.1  # 学习率
+
+train_loss_list = []
+train_acc_list = []
+test_acc_list = []
+
+# 平均每个 epoch 的重复次数
+iter_per_epoch = max(train_size / batch_size, 1)
+
+for i in range(iters_num):
+    # 获取 mini-batch
+    batch_mask = np.random.choice(train_size, batch_size)
+    x_batch = x_train[batch_mask]
+    t_batch = t_train[batch_mask]
+
+    # 计算梯度
+    grad = network.numerical_gradient(x_batch, t_batch)
+
+    # 更新参数
+    for key in ('W1', 'b1', 'W2', 'b2'):
+        network.params[key] -= learning_rate * grad[key]
+
+    # 记录学习过程
+    loss = network.loss(x_batch, t_batch)
+    train_loss_list.append(loss)
+
+    # 每个 epoch 完成后计算识别精度
+    if i % iter_per_epoch == 0:
+        train_acc = network.accuracy(x_train, t_train)
+        test_acc = network.accuracy(x_test, t_test)
+        train_acc_list.append(train_acc)
+        test_acc_list.append(test_acc)
+        print('Train acc, test acc | ' + str(train_acc) + ',' + str(test_acc))
+```
+
+画出识别精度关于 epoch 的曲线：
+
+![识别精度](https://s2.loli.net/2022/10/15/jE2J9w5pGhmbWfX.png)
+
+随着学习进行，使用训练数据和测试数据评价的识别精度都在提高，两者几乎没有差距，没有发生过拟合。
+
+~~这一部分就到这里……~~
+
+之前写过的 softmax 函数似乎要换成这样的实现，可能和多维数组有关（具体到这里就是二维的吧，因为数据都是 mini-batch 了，max 和 sum 都需要沿着第2维），不过是不是我还得想想……
+
+```python
+def softmax(x):
+    x = x - np.max(x, axis=-1, keepdims=True)  # 防止 exp() 溢出
+    return np.exp(x) / np.sum(np.exp(x), axis=-1, keepdims=True)
 ```
