@@ -142,6 +142,8 @@ def cross_entropy_error(y, t):
     return -np.sum(t * np.log(y + 1e-7)) / batch_size
 ```
 
+应该可以根据独热编码1值的索引拿到对应标签，这样不论监督数据是哪种形式都可以写在一个实现里。
+
 ### 为什么需要损失函数
 
 按说学习的目标是使神经网络的识别精度足够高，那么用识别精度作为评判标准就好了，为什么还需要损失函数呢？
@@ -299,3 +301,169 @@ print(gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))
 > 像学习率这样的参数称为超参数。这是一种和神经网络的参数（权重和偏置）性质不同的参数。相对于神经网络的权重参数是通过训练数据和学习算法自动获得的，学习率这样的超参数则是人工设定的。一般来说，超参数需要尝试多个值，以便找到一种可以使学习顺利进行的设定。
 
 ### 神经网络的梯度
+
+神经网络的学习需要用到损失函数关于权重参数的梯度。~~在一定的输入下权重参数确实就是变量呢……数学渣的小心确认……~~参考书上举的例子的话，对于一个只有一个形状为 $2 \times 3$ 的权重 $\boldsymbol{W}$ 的神经网络，损失函数用 $L$ 表示，梯度就可以用 $\frac{\partial L}{\partial \boldsymbol{W}}$ 表示。数学式如下：
+
+$$ \boldsymbol{W} = \begin{pmatrix} w_{1 1} & w_{1 2} & w_{1 3} \\\ w_{2 1} & w_{2 2} & w_{2 3} \end{pmatrix} $$
+
+$$ \frac{\partial L}{\partial \boldsymbol{W}} = \begin{pmatrix} \frac{\partial L}{\partial w_{1 1}} & \frac{\partial L}{\partial w_{1 2}} & \frac{\partial L}{\partial w_{1 3}} \\\ \frac{\partial L}{\partial w_{2 1}} & \frac{\partial L}{\partial w_{2 2}} & \frac{\partial L}{\partial w_{2 3}} \end{pmatrix} $$
+
+$\frac{\partial L}{\partial \boldsymbol{W}}$ 的元素由各个元素对应的偏导数构成，形状与 $\boldsymbol{W}$ 相同。
+
+就以这样一个神经网络为例，实现求梯度：
+
+```python
+import sys, os
+import numpy as np
+
+sys.path.append(os.curdir)
+
+from common.func import softmax, cross_entropy_error
+from common.gradient import numerical_gradient
+
+
+class simpleNet:
+    def __init__(self) -> None:
+        self.W = np.random.randn(2, 3)  # 利用高斯分布随机生成0到1之间的数，填充指定形状的多维数组
+
+    def predict(self, x):
+        return np.dot(x, self.W)
+
+    def loss(self, x, t):
+        z = self.predict(x)
+        y = softmax(z)
+        loss = cross_entropy_error(y, t)
+
+        return loss
+
+
+net = simpleNet()
+print('net.W:\n', net.W)  # net 的权重参数
+
+x = np.array([0.6, 0.9])
+p = net.predict(x)
+print('predict x:\n', p)  # 输出
+print('index of max value:\n', np.argmax(p))  # 最大值索引
+
+t = np.array([0, 0, 1])
+print('net.loss:\n', net.loss(x, t))  # 计算交叉熵损失
+
+# W 是伪参数，计算梯度时会执行 f，用到的是 net 内的 W
+# def f(W):
+#     return net.loss(x, t)
+# 也可以用 lambda 表达式
+f = lambda w: net.loss(x, t)
+
+dW = numerical_gradient(f, net.W)  # 求关于权重的梯度，权重自然是 f 的参数
+print('dW:\n', dW)
+```
+
+某一次运行上面代码的输出：
+
+```bash
+net.W:
+ [[ 0.03900802 -0.24126244 -1.60380801]
+ [-0.94332177  1.36421781 -1.05313682]]
+predict x:
+ [-0.82558478  1.08303856 -1.91010794]
+index of max value:
+ 1
+net.loss:
+ 3.174142995517425
+dW:
+ [[ 0.07424015  0.50066058 -0.57490072]
+ [ 0.11136022  0.75099087 -0.86235108]]
+```
+
+计算 `dW` 得到的结果是与 `W` 形状一致的二维数组。看结果的话，例如 $\frac{\partial L}{\partial w_{1 2}}$ 的值约为 $0.5$，表示如果 $w_{1 2}$ 增加 $h$，损失函数的值会增加 $0.5 h$；再比方说 $\frac{\partial L}{\partial w_{2 3}}$ 的值约为 $-0.86$，表示如果 $w_{2 3}$ 增加 $h$，损失函数的值会减小 $0.86 h$。因为要减小损失函数的值，所以 $w_{1 2}$ 应该往负方向更新，$w_{2 3}$ 应该往正方向更新，且更新 $w_{2 3}$ 比更新 $w_{1 2}$ 效果更明显。
+
+## 实现学习算法
+
+> 神经网络的学习步骤如下所示。
+> - **前提**
+>   - 神经网络存在合适的权重和偏置，调整权重和偏置以便拟合训练数据的过程称为“学习”。神经网络的学习分成下面4个步骤。
+> - **步骤1（mini-batch）**
+>   - 从训练数据中随机选出一部分数据，这部分数据称为 mini-batch。我们的目标是减小 mini-batch 的损失函数的值。
+> - **步骤2（计算梯度）**
+>   - 为了减小 mini-batch 的损失函数的值，需要求出各个权重参数的梯度。梯度表示损失函数的值减小最多的方向。
+> - **步骤3（更新参数）**
+>   - 将权重参数沿梯度方向进行微小更新。
+> - **步骤4（重复）**
+>   - 重复步骤1、步骤2、步骤3
+
+上面的方法通过梯度下降更新参数，因为使用了随机选择的 mini-batch，所以又叫做**随机梯度下降法**（stochastic gradient descent，SGD）。
+
+下面跟着书上的指导实现手写数字识别的神经网络。以2层神经网络（有1层隐藏层）为对象，使用 MNIST 数据集进行学习。
+
+### 2层神经网络的类
+
+为2层神经网络实现一个类，如下所示：
+
+```python
+import sys, os
+import numpy as np
+
+sys.path.append(os.curdir)
+
+from common.func import *
+from common.gradient import numerical_gradient
+
+
+class TwoLayerNet:
+    def __init__(self,
+                 input_size,
+                 hidden_size,
+                 output_size,
+                 weight_init_std=0.01):
+        # 初始化权重偏置，注意各层参数的形状
+        self.params = {}
+        self.params['W1'] = weight_init_std * np.random.randn(
+            input_size, hidden_size)
+        self.params['b1'] = np.zeros(hidden_size)
+        self.params['W2'] = weight_init_std * np.random.randn(
+            hidden_size, output_size)
+        self.params['b2'] = np.zeros(output_size)
+
+    # 推理过程
+    def predict(self, x):
+        W1, W2 = self.params['W1'], self.params['W2']
+        b1, b2 = self.params['b1'], self.params['b2']
+
+        a1 = np.dot(x, W1) + b1
+        z1 = sigmoid(a1)
+        a2 = np.dot(z1, W2) + b2
+        y = softmax(a2)
+
+        return y
+
+    # 计算损失函数的值
+    # x 是输入数据，t 是监督数据
+    def loss(self, x, t):
+        y = self.predict(x)
+
+        return cross_entropy_error(y, t)
+
+    # 计算识别精度
+    # x 是输入数据，t 是监督数据
+    def accuracy(self, x, t):
+        y = self.predict(x)  # 获得输出
+        y = np.argmax(y, axis=1)  # 取得输出最大值对应索引（标签）
+        t = np.argmax(t, axis=1)
+
+        accuracy = np.sum(y == t) / float(x.shape[0])
+        return accuracy
+
+    # 求梯度
+    # x 是输入数据，t 是监督数据
+    def numerical_gradient(self, x, t):
+        loss_W = lambda W: self.loss(x, t)
+
+        # 对每层的参数求梯度
+        grads = {}
+        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
+        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
+        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
+        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
+
+        return grads
+```
