@@ -113,3 +113,182 @@ $$ \frac{\partial z}{\partial y} = 1 $$
 ### 乘法节点的反向传播
 
 以 $z = x y$ 为例，它的导数：
+
+$$ \frac{\partial z}{\partial x} = y $$
+
+$$ \frac{\partial z}{\partial y} = x $$
+
+画出计算图：
+
+![乘法节点的反向传播](https://s2.loli.net/2022/10/20/5Qo7dfV9tECyL1M.png)
+
+如果正向的时候信号是 $x$，反向的时候局部导数就是 $y$；正向的时候信号是 $y$，反向的时候局部导数就是 $x$。表现为一种“翻转”的关系。乘法节点需要保留正向传播时传入的参数信息。
+
+## 简单层的实现
+
+知道了反向传播是怎么回事，不妨再来看看怎么用代码实现相关的乘法和加法节点（“层”）。
+
+### 乘法层的实现
+
+对于 $z = x y$，有实现：
+
+```python
+class MulLayer:
+    def __init__(self) -> None:
+        self.x = None
+        self.y = None
+
+    def forward(self, x, y):
+        self.x = x
+        self.y = y
+        out = x * y
+        return out
+
+    def backward(self, dout):
+        dx = dout * self.y  # 翻转 x 和 y
+        dy = dout * self.x
+        return dx, dy
+```
+
+用这个乘法层实现最开始说的买苹果的问题，计算图如下：
+
+![买两个苹果](https://s2.loli.net/2022/10/20/IJtF3jzyrCfnOQ9.png)
+
+正向传播的计算过程：
+
+```python
+apple = 100
+apple_num = 2
+tax = 1.1
+
+mul_apple_layer = MulLayer()
+mul_tax_layer = MulLayer()
+
+# 正向传播过程
+apple_price = mul_apple_layer.forward(apple, apple_num)
+price = mul_tax_layer.forward(apple_price, tax)
+
+print(price)  # 结果是220.00000000000003
+```
+
+反向传播求过程中各个变量的导数：
+
+```python
+# 反向传播过程
+dprice = 1
+dapple_price, dtax = mul_tax_layer.backward(dprice)
+dapple, dapple_num = mul_apple_layer.backward(dapple_price)
+print(dapple, dapple_num, dtax)  # 结果是 2.2 110.00000000000001 200
+```
+
+### 加法层的实现
+
+对于 $z = x + y$，加法层有实现如下：
+
+```python
+class AddLayer:
+    def __init__(self) -> None:
+        pass
+
+    def forward(self, x, y):
+        out = x + y
+        return out
+ 
+    def backward(self, dout):
+        dx = dout * 1
+        dy = dout * 1
+        return dx, dy
+```
+
+要解决的问题是买2个苹果和3个橘子，计算图如下：
+
+![买2个苹果和3个橘子](https://s2.loli.net/2022/10/21/KieElhcZmUMOJCQ.png)
+
+正向传播和反向传播的过程：
+
+```python
+apple = 100
+apple_num = 2
+orange = 150
+orange_num = 3
+tax = 1.1
+
+mul_apple_layer = MulLayer()
+mul_orange_layer = MulLayer()
+add_apple_orange_layer = AddLayer()
+mul_tax_layer = MulLayer()
+
+# 前向传播过程
+apple_price = mul_apple_layer.forward(apple, apple_num)  #(1)
+orange_price = mul_orange_layer.forward(orange, orange_num)  #(2)
+all_price = add_apple_orange_layer.forward(apple_price, orange_price)  #(3)
+price = mul_tax_layer.forward(all_price, tax)  #(4)
+
+# 反向传播过程，要注意与正向传播的计算顺序相反
+dprice = 1
+dall_price, dtax = mul_tax_layer.backward(dprice)  #(4)
+dapple_price, dorange_price = add_apple_orange_layer.backward(dall_price)  #(3)
+dorange, dorange_num = mul_orange_layer.backward(dorange_price)  #(2)
+dapple, dapple_num = mul_apple_layer.backward(dapple_price)  #(1)
+
+print(price)  # 结果是715.0000000000001
+print(dapple_num, dapple, dorange, dorange_num,
+      dtax)  # 结果是110.00000000000001 2.2 3.3000000000000003 165.0 650
+```
+
+与计算图对照，显然能得到正确结果。
+
+## 激活函数层的实现
+
+既然简单的乘法加法等节点能用代码以层的形式实现，那么神经网络中的节点应该也可以，毕竟也没有复杂太多。把构成神经网络的层实现为一个类。先来实现激活函数的 ReLU 层和 Sigmoid 层。
+
+### ReLU 层
+
+ReLU 函数：
+
+$$ y = \begin{cases} x & (x \gt 0) \\\ 0 & (x \le 0) \end{cases} $$
+
+$y$ 关于 $x$ 的导数：
+
+$$ \frac{\partial y}{\partial x} = \begin{cases} 1 & (x \gt 0) \\\ 0 & (x \le 0) \end{cases} $$
+
+那么，ReLU 层的计算图：
+
+![ReLU 层的计算图](https://s2.loli.net/2022/10/21/LCrvOc4AmQhdpgz.png)
+
+代码实现：
+
+```python
+class Relu:
+    def __init__(self):
+        self.mask = None
+
+    def forward(self, x):
+        self.mask = (x <= 0)  # mask 是由 bool 值组成的 numpy 数组
+        out = x.copy()
+        out[self.mask] = 0  # 小于等于0的项置0
+        return out
+
+    def backward(self, dout):
+        dout[self.mask] = 0  # 正向传播时输入小于等于0的项对应导数是0
+        dx = dout
+        return dx
+```
+
+### Sigmoid 层
+
+Sigmoid 函数：
+
+$$ y = \frac{1}{1 + exp(-x)} $$
+
+用计算图表示正向传播过程：
+
+![Sigmoid 函数的正向传播](https://s2.loli.net/2022/10/21/TZjQGdIFMoLEUvO.png)
+
+Sigmoid 函数的计算过程中出现了新的节点，需要看一看它们如何进行反向传播。
+
+最后的“/”节点表示 $y = \frac{1}{x}$，它的导数可以解析性地表示为：
+
+$$ \begin{aligned} \frac{\partial y}{\partial x} &= - \frac{1}{x^2} \\\ &= - y^2 \end{aligned} $$
+
+也就是说，反向传播时会将上游传过来的值乘以 $-y^2$（$y$ 是正向传播时该节点的输出）再传给下游。
