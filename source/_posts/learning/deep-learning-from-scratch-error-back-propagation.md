@@ -292,3 +292,103 @@ Sigmoid 函数的计算过程中出现了新的节点，需要看一看它们如
 $$ \begin{aligned} \frac{\partial y}{\partial x} &= - \frac{1}{x^2} \\\ &= - y^2 \end{aligned} $$
 
 也就是说，反向传播时会将上游传过来的值乘以 $-y^2$（$y$ 是正向传播时该节点的输出）再传给下游。
+
+这个加法节点反向传播时显然是将上游传过来的值直接传过去。
+
+“exp” 节点表示 $y = exp(x)$，导数如下：
+
+$$ \frac{\partial y}{\partial x} = exp(x) $$
+
+正向传播时传入的是 $-x$，反向传播时就把上游传过来的值乘以 $exp(-x)$ 再传给下游。
+
+乘法节点是 $x$ 与 $1$ 相乘，所以反向传播时传给 $x$ 方向的应该是上游的值乘以 $-1$。
+
+包含反向传播的计算图如下：
+
+![Sigmoid 函数的计算图](https://s2.loli.net/2022/10/21/Zwpf3F4E8xglh1u.png)
+
+由图可知反向传播的输出是 $\frac{\partial L}{\partial y} y^2 exp(-x)$，只根据正向传播的输入 $x$ 和输出 $y$ 就能得出，所以计算图可以简化：
+
+![简化后 Sigmoid 函数的计算图](https://s2.loli.net/2022/10/21/f2YUTkF5xceru6M.png)
+
+又因为 $y = \frac{1}{1 + exp(-x)}$，$\frac{\partial L}{\partial y} y^2 exp(-x)$ 可以被简化为：
+
+$$ \begin{aligned} \frac{\partial L}{\partial y} y^2 exp(-x) &= \frac{\partial L}{\partial y} \frac{1}{(1 + exp(-x))^2} exp(-x) \\\ &= \frac{\partial L}{\partial y} \frac{1}{1 + exp(-x)} \frac{exp(-x)}{1 + exp(-x)} \\\ &= \frac{\partial L}{\partial y} y(1 - y) \end{aligned} $$
+
+也就是说，Sigmoid 层的反向传播的输出，根据它正向传播时的输出就能算出来。
+
+Sigmoid 层的代码实现：
+
+```python
+class Sigmoid:
+    def __init__(self):
+        self.out = None
+
+    def forward(self, x):
+        out = 1 / (1 + np.exp(-x))
+        self.out = out
+        return out
+
+    def backward(self, dout):
+        dx = dout * (1.0 - self.out) * self.out  # 根据正向传播的输出计算反向传播的结果
+        return dx
+```
+
+## Affine/Softmax 层
+
+~~Affine 层进行仿射变换，也就是矩阵乘积？~~
+
+用层的方式实现矩阵乘积和 Softmax 节点。
+
+### Affine 层
+
+矩阵相乘时对应维度的元素个数必须一致，比如：
+
+![矩阵相乘时对应维度的元素个数应该一致](https://s2.loli.net/2022/10/23/kD8buZ2w9QaBOor.png)
+
+求加权信号的和包括计算矩阵乘积以及与偏置求和。用计算图表示这些运算，其中用“dot”节点表示矩阵乘积：
+
+![计算图-求加权信号之和](https://s2.loli.net/2022/10/23/ngJBVy6RGq2o4x3.png)
+
+各个节点间传播的是矩阵。
+
+考虑上图“dot”节点的反向传播，有：
+
+$$ \frac{\partial L}{\partial \boldsymbol{X}} = \frac{\partial L}{\partial \boldsymbol{Y}} \cdot \boldsymbol{W}^T $$
+
+$$ \frac{\partial L}{\partial \boldsymbol{W}} = \boldsymbol{X}^T \cdot \frac{\partial L}{\partial \boldsymbol{Y}} $$
+
+那么上面计算图的反向传播：
+
+![计算图的反向传播](https://s2.loli.net/2022/10/28/wgac9kBEe8UbGQs.png)
+
+如果输入数据不是单个数据而是批，反向传播时矩阵形状会有所不同：
+
+![计算图的反向传播-batch](https://s2.loli.net/2022/10/28/F3Yjm1lEyh2nNVP.png)
+
+一种代码实现：
+
+```python
+class Affine:
+    def __init__(self, W, b):
+        self.W = W
+        self.b = b
+        self.x = None
+        self.dW = None
+        self.db = None
+
+    def forward(self, x):
+        self.x = x
+        out = np.dot(x, self.W) + self.b
+        return out
+
+    def backward(self, dout):
+        dx = np.dot(dout, self.W.T)
+        self.dW = np.dot(self.x.T, dout)
+        self.db = np.sum(dout, axis=0)
+        return dx
+```
+
+### Softmax-with-loss 层
+
+## 误差反向传播法的实现
