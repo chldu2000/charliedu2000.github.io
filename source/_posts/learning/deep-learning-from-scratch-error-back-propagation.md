@@ -391,4 +391,50 @@ class Affine:
 
 ### Softmax-with-loss 层
 
+最后是输出层的 softmax 函数，考虑作为损失函数的交叉熵误差。
+
+假设要进行3类分类，从前面的层接收3个输入。Softmax 层将输入 $(a_1, a_2, a_3)$ 正规化，输出 $(y_1, y_2, y_3)$。Cross Entropy Error 层接收 Softmax 的输出和监督数据 $(t_1, 
+t_2, t_3)$，输出损失 $L$。简化后的计算图：
+
+![简化后的 Softmax-with-loss 层的计算图](https://s2.loli.net/2022/10/30/cjdiZV8CTMteoYR.png)
+
+实现过程：
+
+```python
+class SoftmaxWithLoss:
+    def __init__(self):
+        self.loss = None  # 损失
+        self.y = None  # softmax 的输出
+        self.t = None  # 监督数据（one-hot vector）
+
+    def forward(self, x, t):
+        self.t = t
+        self.y = softmax(x)
+        self.loss = cross_entropy_error(self.y, self.t)
+        return self.loss
+
+    def backward(self, dout=1):
+        batch_size = self.t.shape[0]
+        dx = (self.y - self.t) / batch_size  # 单个数据的误差
+        return dx
+```
+
 ## 误差反向传播法的实现
+
+已经知道神经网络学习的步骤如下：
+
+> - **前提**
+>   - 神经网络存在合适的权重和偏置，调整权重和偏置以便拟合训练数据的过程称为“学习”。神经网络的学习分成下面4个步骤。
+> - **步骤1（mini-batch）**
+>   - 从训练数据中随机选出一部分数据。
+> - **步骤2（计算梯度）**
+>   - 求出各个权重参数的梯度。
+> - **步骤3（更新参数）**
+>   - 将权重参数沿梯度方向进行微小更新。
+> - **步骤4（重复）**
+>   - 重复步骤1、步骤2、步骤3
+
+误差反向传播法在第二步中出现。之前计算梯度是通过数值微分求的，实现简单，不过计算起来要花费比较长的时间，用误差反向传播法可以改善这一点。
+
+我们已经将网络中的节点表示成了“层”，网络获取结果和计算梯度的过程可以由层之间的传递完成。对应误差反向传播法的2层网络的实现：
+
