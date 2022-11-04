@@ -8,8 +8,6 @@ date: 2022-10-17 23:06:12
 katex: true
 ---
 
-**施工中**
-
 内容参考：
 
 - 《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)
@@ -438,3 +436,197 @@ class SoftmaxWithLoss:
 
 我们已经将网络中的节点表示成了“层”，网络获取结果和计算梯度的过程可以由层之间的传递完成。对应误差反向传播法的2层网络的实现：
 
+```python
+import sys, os
+sys.path.append(os.curdir)
+import numpy as np
+from common.layers import *
+from common.gradient import numerical_gradient
+from collections import OrderedDict  # 有序字典
+
+
+class TwoLayerNet:
+    def __init__(self,
+                 input_size,
+                 hidden_size,
+                 output_size,
+                 weight_init_std=0.01) -> None:
+        # 初始化权重
+        self.params = {}
+        self.params['W1'] = weight_init_std * np.random.randn(
+            input_size, hidden_size)
+        self.params['b1'] = np.zeros(hidden_size)
+        self.params['W2'] = weight_init_std * np.random.randn(
+            hidden_size, output_size)
+        self.params['b2'] = np.zeros(output_size)
+
+        # 生成层
+        self.layers = OrderedDict()
+        self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
+        self.layers['ReLU'] = Relu()
+        self.layers['Affine2'] = Affine(self.params['W2'], self.params['b2'])
+        self.lastLayer = SoftmaxWithLoss()
+
+    def predict(self, x):
+        for layer in self.layers.values():
+            x = layer.forward(x)
+
+        return x
+
+    def loss(self, x, t):
+        y = self.predict(x)
+        return self.lastLayer.forward(y, t)  # 算出交叉熵误差
+
+    def accuracy(self, x, t):
+        y = self.predict(x)
+        y = np.argmax(y, axis=1)
+        if t.ndim != 1:
+            t = np.argmax(t, axis=1)
+        accuracy = np.sum(y == t) / float(x.shape[0])
+        return accuracy
+
+    def numerical_gradient(self, x, t):
+        loss_W = lambda W: self.loss(x, t)
+
+        # 对每层的参数求梯度
+        grads = {}
+        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
+        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
+        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
+        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
+
+        return grads
+
+    def gradient(self, x, t):
+        # 前向传播
+        self.loss(x, t)
+
+        # 反向
+        dout = 1
+        dout = self.lastLayer.backward(dout)
+
+        layers = list(self.layers.values())
+        layers.reverse()
+        for layer in layers:
+            dout = layer.backward(dout)
+
+        grads = {}
+        grads['W1'] = self.layers['Affine1'].dW
+        grads['b1'] = self.layers['Affine1'].db
+        grads['W2'] = self.layers['Affine2'].dW
+        grads['b2'] = self.layers['Affine2'].db
+
+        return grads
+```
+
+### 误差反向传播法的梯度确认
+
+像上面这样通过反向传播，使用解析性的方法计算梯度，虽然免去了数值微分的大量计算，但是实现比较复杂（各层分别实现，都不能出错），还是需要经常比较数值微分的结果和误差反向传播法的结果，以确认误差反向传播法的结果是否正确。这个“确认”的操作就是**梯度确认**。
+
+实现如下：
+
+```python
+import sys, os
+
+sys.path.append(os.curdir)
+import numpy as np
+from dataset.mnist import load_mnist
+from two_layer_net import TwoLayerNet
+
+# 读入数据
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True,
+                                                  one_hot_label=True)
+
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+x_batch = x_train[:3]
+t_batch = t_train[:3]
+
+grad_numerical = network.numerical_gradient(x_batch, t_batch)
+grad_backprop = network.gradient(x_batch, t_batch)
+
+# 每个权重梯度的绝对误差平均值
+for key in grad_numerical.keys():
+    diff = np.average(np.abs(grad_backprop[key] - grad_numerical[key]))
+    print(key + ':' + str(diff))
+```
+
+只要 `diff` 的值是一个接近0的很小的值就说明误差反向传播法的计算没有错误。
+
+### 使用误差反向传播法的学习
+
+与[上一篇](https://afool.top/learning/deep-learning-from-scratch-learning-of-neural-network/)里的方法相比，不同之处就在于使用误差反向传播法来求梯度。实现如下：
+
+```python
+import sys, os
+import numpy as np
+import matplotlib.pyplot as plt
+
+sys.path.append(os.curdir)
+
+from two_layer_net import TwoLayerNet
+from dataset.mnist import load_mnist
+
+# print('Load mnist dataset...')
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True,
+                                                  one_hot_label=True)
+
+# print('Initialize network...')
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+# 超参数
+iters_num = 10000  # 梯度法更新次数
+train_size = x_train.shape[0]  # 训练集大小
+batch_size = 100  # batch 大小
+learning_rate = 0.1  # 学习率
+
+train_loss_list = []
+train_acc_list = []
+test_acc_list = []
+
+# 平均每个 epoch 的重复次数
+iter_per_epoch = max(train_size / batch_size, 1)
+
+for i in range(iters_num):
+    # 获取 mini-batch
+    # print(i, ': choose mini-batch...')
+    batch_mask = np.random.choice(train_size, batch_size)
+    x_batch = x_train[batch_mask]
+    t_batch = t_train[batch_mask]
+
+    # 计算梯度
+    # print(i, ': calculate grads...')
+    # grad = network.numerical_gradient(x_batch, t_batch)
+    grad = network.gradient(x_batch, t_batch)  # 误差反向传播法
+
+    # 更新参数
+    # print(i, ': update params...')
+    for key in ('W1', 'b1', 'W2', 'b2'):
+        network.params[key] -= learning_rate * grad[key]
+
+    # 记录学习过程
+    loss = network.loss(x_batch, t_batch)
+    # print(i, 'loss: ', loss)
+    train_loss_list.append(loss)
+
+    # 每个 epoch 完成后计算识别精度
+    if i % iter_per_epoch == 0:
+        train_acc = network.accuracy(x_train, t_train)
+        test_acc = network.accuracy(x_test, t_test)
+        train_acc_list.append(train_acc)
+        test_acc_list.append(test_acc)
+        print('Train acc, test acc | ' + str(train_acc) + ', ' + str(test_acc))
+
+# 画出图像
+# markers = {'train': 'o', 'test': 's'}
+x = np.arange(len(train_acc_list))  # 生成 x 坐标
+plt.plot(x, train_acc_list, label='train acc')  # 训练集识别精度
+plt.plot(x, test_acc_list, label='test acc', linestyle='--')  # 测试集识别精度，虚线
+plt.xlabel("epochs")  # 横轴单位
+plt.ylabel("accuracy")  # 纵轴单位
+plt.ylim(0, 1.0)
+plt.legend(loc='lower right')  # 右下角图例
+plt.show()
+```
+
+效果立竿见影，比之前的快了不是一点半点。那就这样~
