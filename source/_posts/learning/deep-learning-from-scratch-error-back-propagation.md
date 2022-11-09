@@ -334,7 +334,7 @@ class Sigmoid:
 
 ## Affine/Softmax 层
 
-~~Affine 层进行仿射变换，也就是矩阵乘积？~~
+~~Affine 层进行仿射变换，也就是矩阵乘积？（实际上还要算上与偏置之和？）~~
 
 用层的方式实现矩阵乘积和 Softmax 节点。
 
