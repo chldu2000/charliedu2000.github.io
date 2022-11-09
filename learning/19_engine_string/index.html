@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="零歌"><meta name="copyright" content="零歌"><meta name="generator" content="Hexo 6.3.0"><meta name="theme" content="hexo-theme-yun"><title>19.Engine-字符串 | 愚人而已</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/afool.svg"><link rel="mask-icon" href="/afool.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"afool.top","root":"/","title":"愚人而已","version":"1.10.9","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="alternate" href="/atom.xml" title="愚人而已" type="application/atom+xml"><meta name="description" content="【问题描述】谷歌、百度等搜索引擎已经成为了互连网中不可或缺的一部分。在本题中，你的任务也是设计一个搜索论文的搜索引擎，当然，本题的要求比起实际的需求要少了许多。 本题的输入将首先给出一系列的论文，对于每篇论文首先给出标题，然后给出它被引用的次数。然后会有一系列的搜索询问，询问标题中包含特定关键词的论文有哪些。 每一个询问可能包含多个关键词，你需要找出标题包含所有关键词的论文。“包含”必须是标题中有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="19.Engine-字符串">
+<meta property="og:url" content="https://afool.top/learning/19_engine_string/">
+<meta property="og:site_name" content="愚人而已">
+<meta property="og:description" content="【问题描述】谷歌、百度等搜索引擎已经成为了互连网中不可或缺的一部分。在本题中，你的任务也是设计一个搜索论文的搜索引擎，当然，本题的要求比起实际的需求要少了许多。 本题的输入将首先给出一系列的论文，对于每篇论文首先给出标题，然后给出它被引用的次数。然后会有一系列的搜索询问，询问标题中包含特定关键词的论文有哪些。 每一个询问可能包含多个关键词，你需要找出标题包含所有关键词的论文。“包含”必须是标题中有">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-22T14:58:00.000Z">
+<meta property="article:modified_time" content="2022-11-07T08:43:40.831Z">
+<meta property="article:author" content="零歌">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="零歌"><img width="96" loading="lazy" src="/images/nekosense.jpeg" alt="零歌"></a><div class="site-author-name"><a href="/about/">零歌</a></div><span class="site-name">愚人而已</span><sub class="site-subtitle">以愚者之名攀上顶峰</sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">45</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">5</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">33</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/charliedu2000" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=610609902" title="网易云音乐" target="_blank" style="color:#C20C0C"><span class="icon iconify" data-icon="ri:netease-cloud-music-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/22660607" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><span class="icon iconify" data-icon="ri:bilibili-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:charliedu2000@hotmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="旁友们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%E3%80%91"><span class="toc-number">1.</span> <span class="toc-text">【问题描述】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E8%BE%93%E5%85%A5%E5%BD%A2%E5%BC%8F%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">【输入形式】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E8%BE%93%E5%87%BA%E5%BD%A2%E5%BC%8F%E3%80%91"><span class="toc-number">3.</span> <span class="toc-text">【输出形式】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B%E3%80%91"><span class="toc-number">4.</span> <span class="toc-text">【测试样例】</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%85%A51%E3%80%91"><span class="toc-number">4.1.</span> <span class="toc-text">【样例输入1】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%87%BA1%E3%80%91"><span class="toc-number">4.2.</span> <span class="toc-text">【样例输出1】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%85%A52%E3%80%91"><span class="toc-number">4.3.</span> <span class="toc-text">【样例输入2】</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%87%BA2%E3%80%91"><span class="toc-number">4.4.</span> <span class="toc-text">【样例输出2】</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E6%80%9D%E8%B7%AF%E4%B8%8E%E5%81%9A%E6%B3%95%E3%80%91"><span class="toc-number">5.</span> <span class="toc-text">【思路与做法】</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://afool.top/learning/19_engine_string/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="零歌"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="愚人而已"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">19.Engine-字符串</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2020-08-22 22:58:00" itemprop="dateCreated datePublished" datetime="2020-08-22T22:58:00+08:00">2020-08-22</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><span class="icon iconify" data-icon="ri:file-word-line"></span></span> <span title="本文字数">1.5k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><span class="icon iconify" data-icon="ri:timer-line"></span></span> <span title="阅读时长">6m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%BF%AB%E5%8E%BB%E5%AD%A6%E4%B9%A0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">快去学习</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/C/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">C++</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h2 id="【问题描述】"><a href="#【问题描述】" class="headerlink" title="【问题描述】"></a>【问题描述】</h2><p>谷歌、百度等搜索引擎已经成为了互连网中不可或缺的一部分。在本题中，你的任务也是设计一个搜索论文的搜索引擎，当然，本题的要求比起实际的需求要少了许多。</p>
+<p>本题的输入将首先给出一系列的论文，对于每篇论文首先给出标题，然后给出它被引用的次数。然后会有一系列的搜索询问，询问标题中包含特定关键词的论文有哪些。</p>
+<p>每一个询问可能包含多个关键词，你需要找出标题包含所有关键词的论文。“包含”必须是标题中有一个词正好是给定的关键词，不区分大小写。</p>
+<p>对每个询问，都按被引用的次数从多到少输出满足条件的论文的标题。如果有被引用的次数相同的论文，则按照论文在输入中的顺序排列，先给出的论文排在前面。</p>
+<span id="more"></span>
+
+<h2 id="【输入形式】"><a href="#【输入形式】" class="headerlink" title="【输入形式】"></a>【输入形式】</h2><p>输入包含多组数据。</p>
+<p>每组数据首先有一行包含一个整数N(1&lt;&#x3D;N&lt;&#x3D;1000)，表示论文的数目，N&#x3D;0表示输入结束。每组论文的信息第一行是论文的标题，由字母（大小写均可）和空格组成，不超过10个词，每个词不超过20个字符，标题总共不超过250个字符。第二行是一个整数K(0&lt;&#x3D;K&lt;&#x3D;108)，表示它被引用的次数。在论文信息结束以后，有一行包含一个整数M(1&lt;&#x3D;M&lt;&#x3D;100)，表示询问的数目。接下来有M行，每行是一个询问，由L(1&lt;&#x3D;L&lt;&#x3D;10)个空格分开的词构成，每个词不超过20个字符。</p>
+<h2 id="【输出形式】"><a href="#【输出形式】" class="headerlink" title="【输出形式】"></a>【输出形式】</h2><p>对每个询问，按照题目给定的顺序输出满足条件的论文的标题；如果没有满足条件的论文，就不输出。在每组询问的输出之后输出一行“***”，在每组数据的输出之后输出一行“—”。</p>
+<h2 id="【测试样例】"><a href="#【测试样例】" class="headerlink" title="【测试样例】"></a>【测试样例】</h2><h3 id="【样例输入1】"><a href="#【样例输入1】" class="headerlink" title="【样例输入1】"></a>【样例输入1】</h3><pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">6</span>
+Finding the Shortest Path
+<span class="token number">120</span>
+Finding the k Shortest Path
+<span class="token number">80</span>
+Find Augmenting Path in General Graph
+<span class="token number">80</span>
+Matching in Bipartite Graph
+<span class="token number">200</span>
+Finding kth Shortest Path
+<span class="token number">50</span>
+Graph Theory <span class="token operator">and</span> its Applications
+<span class="token number">40</span>
+<span class="token number">6</span>
+shortest path
+k shortest path
+graph
+path
+find
+application
+<span class="token number">0</span></code></pre>
+
+<h3 id="【样例输出1】"><a href="#【样例输出1】" class="headerlink" title="【样例输出1】"></a>【样例输出1】</h3><pre class="language-cpp" data-language="cpp"><code class="language-cpp">Finding the Shortest Path
+Finding the k Shortest Path
+Finding kth Shortest Path
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+Finding the k Shortest Path
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+Matching in Bipartite Graph
+Find Augmenting Path in General Graph
+Graph Theory <span class="token operator">and</span> its Applications
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+Finding the Shortest Path
+Finding the k Shortest Path
+Find Augmenting Path in General Graph
+Finding kth Shortest Path
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+Find Augmenting Path in General Graph
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+<span class="token operator">--</span><span class="token operator">-</span></code></pre>
+
+<h3 id="【样例输入2】"><a href="#【样例输入2】" class="headerlink" title="【样例输入2】"></a>【样例输入2】</h3><pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1</span>
+Finding the Shortest Path
+<span class="token number">120</span>
+<span class="token number">2</span>
+Path
+Pat
+<span class="token number">0</span></code></pre>
+
+<h3 id="【样例输出2】"><a href="#【样例输出2】" class="headerlink" title="【样例输出2】"></a>【样例输出2】</h3><pre class="language-cpp" data-language="cpp"><code class="language-cpp">Finding the Shortest Path
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+<span class="token operator">*</span><span class="token operator">*</span><span class="token operator">*</span>
+<span class="token operator">--</span><span class="token operator">-</span></code></pre>
+<h2 id="【思路与做法】"><a href="#【思路与做法】" class="headerlink" title="【思路与做法】"></a>【思路与做法】</h2><ul>
+<li>需要注意的是查询的时候要把输入的关键词中的词语分割开一个一个查询，而不是作为一个整体，例如：输入的是shortest path，应该分别查找shortest和path，某个题目里面两者都存在则输出该题目；</li>
+<li>将每个论文题目的字母全部转成小写另外存储，将要查询的关键词也转成小写再查找；</li>
+<li>提交代码（10&#x2F;10分，C++）：</li>
+</ul>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//19.Engine-字符串</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstdio></span></span>
+
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">article</span>
+<span class="token punctuation">&#123;</span>
+    string title<span class="token punctuation">;</span>
+    string title_l<span class="token punctuation">;</span> <span class="token comment">//转小写后的标题</span>
+    <span class="token keyword">int</span> times_ref<span class="token punctuation">;</span>  <span class="token comment">//被引用次数</span>
+    <span class="token function">article</span><span class="token punctuation">(</span>string t<span class="token punctuation">,</span> string tl<span class="token punctuation">,</span> <span class="token keyword">int</span> num<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>title <span class="token operator">=</span> t<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>title_l <span class="token operator">=</span> tl<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>times_ref <span class="token operator">=</span> num<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">bool</span> <span class="token function">cmp</span><span class="token punctuation">(</span><span class="token keyword">const</span> article <span class="token operator">&amp;</span>a<span class="token punctuation">,</span> <span class="token keyword">const</span> article <span class="token operator">&amp;</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>           <span class="token comment">//按被引用次数进行排序</span>
+string <span class="token function">string2lstring</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span><span class="token punctuation">;</span>                      <span class="token comment">//大写转小写</span>
+<span class="token keyword">void</span> <span class="token function">inquire</span><span class="token punctuation">(</span>vector<span class="token operator">&lt;</span>string<span class="token operator">></span> obj<span class="token punctuation">,</span> vector<span class="token operator">&lt;</span>article<span class="token operator">></span> arts<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//查询</span>
+vector<span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token function">split</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span><span class="token punctuation">;</span>                       <span class="token comment">//将str中的词分割开</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> n<span class="token punctuation">,</span> n_search<span class="token punctuation">,</span> times<span class="token punctuation">;</span> <span class="token comment">//论文数目、查询次数、被引用次数</span>
+    vector<span class="token operator">&lt;</span>article<span class="token operator">></span> arts<span class="token punctuation">;</span>   <span class="token comment">//所有论文</span>
+    vector<span class="token operator">&lt;</span>string<span class="token operator">></span> words<span class="token punctuation">;</span>
+    string str<span class="token punctuation">,</span> str_l<span class="token punctuation">;</span> <span class="token comment">//标题、转小写的标题</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>cin <span class="token operator">>></span> n <span class="token operator">&amp;&amp;</span> n <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment">//论文数目</span>
+    <span class="token punctuation">&#123;</span>
+        arts<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//arts清空</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">getline</span><span class="token punctuation">(</span>cin<span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment">//论文题目</span>
+            cin <span class="token operator">>></span> times<span class="token punctuation">;</span>                               <span class="token comment">//被引用次数</span>
+            str_l <span class="token operator">=</span> <span class="token function">string2lstring</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token comment">//题目转小写</span>
+            arts<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token function">article</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> str_l<span class="token punctuation">,</span> times<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//存入arts</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">sort</span><span class="token punctuation">(</span>arts<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> arts<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmp<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//排序</span>
+
+        cin <span class="token operator">>></span> n_search<span class="token punctuation">;</span> <span class="token comment">//查询次数</span>
+        <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n_search<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            words<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>               <span class="token comment">//words清空</span>
+            <span class="token function">getline</span><span class="token punctuation">(</span>cin<span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>           <span class="token comment">//查询的关键词</span>
+            str_l <span class="token operator">=</span> <span class="token function">string2lstring</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//关键词转小写</span>
+            words <span class="token operator">=</span> <span class="token function">split</span><span class="token punctuation">(</span>str_l<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//关键词存入words</span>
+            <span class="token function">inquire</span><span class="token punctuation">(</span>words<span class="token punctuation">,</span> arts<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">//查询</span>
+        <span class="token punctuation">&#125;</span>
+        cout <span class="token operator">&lt;&lt;</span> <span class="token string">"---"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">bool</span> <span class="token function">cmp</span><span class="token punctuation">(</span><span class="token keyword">const</span> article <span class="token operator">&amp;</span>a<span class="token punctuation">,</span> <span class="token keyword">const</span> article <span class="token operator">&amp;</span>b<span class="token punctuation">)</span> <span class="token comment">//按被引用次数进行排序</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> a<span class="token punctuation">.</span>times_ref <span class="token operator">></span> b<span class="token punctuation">.</span>times_ref<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+string <span class="token function">string2lstring</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span> <span class="token comment">//大写转小写</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">>=</span> <span class="token char">'A'</span> <span class="token operator">&amp;&amp;</span> str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;=</span> <span class="token char">'Z'</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token number">32</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> str<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">inquire</span><span class="token punctuation">(</span>vector<span class="token operator">&lt;</span>string<span class="token operator">></span> obj<span class="token punctuation">,</span> vector<span class="token operator">&lt;</span>article<span class="token operator">></span> arts<span class="token punctuation">)</span> <span class="token comment">//查询</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> num_words <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">//输入了几个词</span>
+    <span class="token keyword">int</span> num_words_found<span class="token punctuation">;</span>              <span class="token comment">//查找到了几个词</span>
+    <span class="token keyword">int</span> len_o<span class="token punctuation">;</span>                        <span class="token comment">//关键词的长度</span>
+    vector<span class="token operator">&lt;</span>article<span class="token operator">></span><span class="token double-colon punctuation">::</span>iterator it<span class="token punctuation">;</span>     <span class="token comment">//迭代器it，指向文章</span>
+    vector<span class="token operator">&lt;</span>string<span class="token operator">></span><span class="token double-colon punctuation">::</span>iterator theWord<span class="token punctuation">;</span> <span class="token comment">//迭代器theWord指向某一关键词</span>
+    string<span class="token double-colon punctuation">::</span>size_type findWord<span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>it <span class="token operator">=</span> arts<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> arts<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        num_words_found <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">//查找到的词数初始化</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>theWord <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> theWord <span class="token operator">!=</span> obj<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> theWord<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            len_o <span class="token operator">=</span> theWord<span class="token operator">-></span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            findWord <span class="token operator">=</span> it<span class="token operator">-></span>title_l<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token operator">*</span>theWord<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//在标题中寻找关键词</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>findWord <span class="token operator">!=</span> string<span class="token double-colon punctuation">::</span>npos<span class="token punctuation">)</span>          <span class="token comment">//能找到词</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>findWord <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> it<span class="token operator">-></span>title_l<span class="token punctuation">[</span>findWord <span class="token operator">+</span> len_o<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token char">' '</span><span class="token punctuation">)</span> <span class="token comment">//关键词在开头，关键词后对应空格</span>
+                <span class="token punctuation">&#123;</span>
+                    num_words_found <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>it<span class="token operator">-></span>title_l<span class="token punctuation">[</span>findWord <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token char">' '</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>it<span class="token operator">-></span>title_l<span class="token punctuation">[</span>findWord <span class="token operator">+</span> len_o<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token char">' '</span> <span class="token operator">||</span> it<span class="token operator">-></span>title_l<span class="token punctuation">[</span>findWord <span class="token operator">+</span> len_o<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token char">'\0'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token comment">//关键词前对应空格，后对应空格或结尾</span>
+                    num_words_found <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>num_words_found <span class="token operator">==</span> num_words<span class="token punctuation">)</span> <span class="token comment">//输入的词全部找到</span>
+        <span class="token punctuation">&#123;</span>
+            cout <span class="token operator">&lt;&lt;</span> it<span class="token operator">-></span>title <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"***"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+vector<span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token function">split</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span> <span class="token comment">//将str中的词分割开</span>
+<span class="token punctuation">&#123;</span>
+    vector<span class="token operator">&lt;</span>string<span class="token operator">></span> words_s<span class="token punctuation">;</span> <span class="token comment">//分割好的词</span>
+    <span class="token keyword">unsigned</span> head_w <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment">//词的开头位置</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> str<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token char">' '</span><span class="token punctuation">)</span> <span class="token comment">//当前位置是空格</span>
+        <span class="token punctuation">&#123;</span>
+            words_s<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>head_w<span class="token punctuation">,</span> i <span class="token operator">-</span> head_w<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//从head_w到i之前的字符组成一个词，substr(起始位置,截取长度)</span>
+            head_w <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>                                    <span class="token comment">//开头位置变为i+1</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    words_s<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>head_w<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//当前head_w为最后一个空格位置+1（没有出现空格则为0），从该位置到末尾组成一个词</span>
+    <span class="token keyword">return</span> words_s<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>零歌</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://afool.top/learning/19_engine_string/" title="19.Engine-字符串">https://afool.top/learning/19_engine_string/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/learning/24_europe_championship/" rel="prev" title="24.欧洲冠军联赛"><span class="icon iconify" data-icon="ri:arrow-left-s-line"></span><span class="post-nav-text">24.欧洲冠军联赛</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/writing/insects_awaken/" rel="next" title="惊蛰"><span class="post-nav-text">惊蛰</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>留个爪印吧~</span><br></div><div id="tcomment"></div><script type="module">import { getScript } from '/js/utils.js'
+
+getScript("https://fastly.jsdelivr.net/npm/twikoo@latest/dist/twikoo.all.min.js", () => {
+  const twikooConfig = {"enable":true,"envId":"https://twikoo-afool.vercel.app/"}
+  twikooConfig.el = '#tcomment'
+  twikoo.init(twikooConfig)
+}, window.twikoo);</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 零歌</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.9</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>

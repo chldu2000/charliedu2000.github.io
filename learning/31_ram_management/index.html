@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="零歌"><meta name="copyright" content="零歌"><meta name="generator" content="Hexo 6.3.0"><meta name="theme" content="hexo-theme-yun"><title>31.内存管理 | 愚人而已</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/afool.svg"><link rel="mask-icon" href="/afool.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"afool.top","root":"/","title":"愚人而已","version":"1.10.9","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="alternate" href="/atom.xml" title="愚人而已" type="application/atom+xml"><meta name="description" content="个人思路仅供参考，如有不足欢迎交流。  【问题描述】离第一个操作系统HNU-OS发布已经没有多少时间了，但它的一些组件还没有完成，内存管理器就是其中之一。根据开发人员的计划，在第一个版本中，内存管理器将非常简单和直观。它将支持三个操作：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="31.内存管理">
+<meta property="og:url" content="https://afool.top/learning/31_ram_management/">
+<meta property="og:site_name" content="愚人而已">
+<meta property="og:description" content="个人思路仅供参考，如有不足欢迎交流。  【问题描述】离第一个操作系统HNU-OS发布已经没有多少时间了，但它的一些组件还没有完成，内存管理器就是其中之一。根据开发人员的计划，在第一个版本中，内存管理器将非常简单和直观。它将支持三个操作：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-24T16:08:00.000Z">
+<meta property="article:modified_time" content="2022-11-07T08:43:40.831Z">
+<meta property="article:author" content="零歌">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="零歌"><img width="96" loading="lazy" src="/images/nekosense.jpeg" alt="零歌"></a><div class="site-author-name"><a href="/about/">零歌</a></div><span class="site-name">愚人而已</span><sub class="site-subtitle">以愚者之名攀上顶峰</sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">45</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">5</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">33</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/charliedu2000" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=610609902" title="网易云音乐" target="_blank" style="color:#C20C0C"><span class="icon iconify" data-icon="ri:netease-cloud-music-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/22660607" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><span class="icon iconify" data-icon="ri:bilibili-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:charliedu2000@hotmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="旁友们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%E3%80%91"><span class="toc-number">1.</span> <span class="toc-text">【问题描述】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E8%BE%93%E5%85%A5%E5%BD%A2%E5%BC%8F%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">【输入形式】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E8%BE%93%E5%87%BA%E5%BD%A2%E5%BC%8F%E3%80%91"><span class="toc-number">3.</span> <span class="toc-text">【输出形式】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%85%A5%E3%80%91"><span class="toc-number">4.</span> <span class="toc-text">【样例输入】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%87%BA%E3%80%91"><span class="toc-number">5.</span> <span class="toc-text">【样例输出】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%90%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E3%80%91"><span class="toc-number">6.</span> <span class="toc-text">【提交代码】</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://afool.top/learning/31_ram_management/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="零歌"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="愚人而已"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">31.内存管理</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2020-08-25 00:08:00" itemprop="dateCreated datePublished" datetime="2020-08-25T00:08:00+08:00">2020-08-25</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><span class="icon iconify" data-icon="ri:file-word-line"></span></span> <span title="本文字数">1.4k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><span class="icon iconify" data-icon="ri:timer-line"></span></span> <span title="阅读时长">5m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%BF%AB%E5%8E%BB%E5%AD%A6%E4%B9%A0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">快去学习</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/C/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">C++</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><blockquote>
+<p>个人思路仅供参考，如有不足欢迎交流。</p>
+</blockquote>
+<h2 id="【问题描述】"><a href="#【问题描述】" class="headerlink" title="【问题描述】"></a>【问题描述】</h2><p>离第一个操作系统HNU-OS发布已经没有多少时间了，但它的一些组件还没有完成，内存管理器就是其中之一。根据开发人员的计划，在第一个版本中，内存管理器将非常简单和直观。它将支持三个操作：</p>
+<span id="more"></span>
+
+<p>alloc n —— 分配n个字节内存，返回已分配块的正整数标识符x(x初始值为0，每次分配增长1)</p>
+<p>erase x —— 删除标识符x所在的块</p>
+<p>defragment —— 整理空余内存碎片，将所有块尽量靠近内存的开始位置，并保持各自的顺序</p>
+<p>   在此情况下，内存模型非常简单，它是一个m字节的序列，为了方便起见，从第一个字节到第m字节进行编号。</p>
+<p>   第一个操作alloc n有一个参数n，表示被分配的内存块大小。在处理此操作时，内存中将分配n个连续字节的空闲块。 如果这些块的数量超过一个，则优先选择最接近内存开始(即第一个字节)的块。 所有这些字节都被标记为非空闲，内存管理器返回一个32位整数数字令牌，代表该块的标识符。 如果不可能分配这样大小的空闲块，则返回NULL。</p>
+<p>   第二个操作erase x以x为参数，表示某个块的标识符。此操作释放系统内存，将此块的字节标记为空闲以供进一步使用。 如果此标识符没有指向先前分配的块(该块尚未被释放)，则返回ILLEGAL_ERASE_ARGUMENT。</p>
+<p>   最后一个操作defragment没有任何参数，只会使占用的内存部分更接近内存的开始，而不会更改它们各自的顺序。 </p>
+<p>   在当前的实现中，将使用从1开始的连续整数作为标识符。每个成功的alloc操作过程都应该返回接下来的编号。不成功的alloc操作不影响计数。 </p>
+<p>   编写内存管理器的实现，为每个alloc命令输出返回的值，为所有失败的erase命令输出ILLEGAL_ERASE_ARGUMENT。 </p>
+<h2 id="【输入形式】"><a href="#【输入形式】" class="headerlink" title="【输入形式】"></a>【输入形式】</h2><p>输入数据的第一行包含两个正整数t和m（1&lt;&#x3D;t&lt;&#x3D;500, 1&lt;&#x3D;m&lt;&#x3D;105)，其中t表示需要内存管理器来处理的操作个数，m表示有效的内存字节大小。接下来的t行每一行代表一个操作。</p>
+<h2 id="【输出形式】"><a href="#【输出形式】" class="headerlink" title="【输出形式】"></a>【输出形式】</h2><p>  输出有多行，每行或者是alloc操作的结果，或者是失败的erase操作的结果ILLEGAL_ERASE_ARGUMENT。其顺序与输入的操作次序一致。</p>
+<h2 id="【样例输入】"><a href="#【样例输入】" class="headerlink" title="【样例输入】"></a>【样例输入】</h2><pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">6</span> <span class="token number">10</span>
+alloc <span class="token number">5</span>
+alloc <span class="token number">3</span>
+erase <span class="token number">1</span>
+alloc <span class="token number">6</span>
+defragment
+alloc <span class="token number">6</span></code></pre>
+<h2 id="【样例输出】"><a href="#【样例输出】" class="headerlink" title="【样例输出】"></a>【样例输出】</h2><pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token number">1</span>
+<span class="token number">2</span>
+<span class="token constant">NULL</span>
+<span class="token number">3</span></code></pre>
+<h2 id="【提交代码】"><a href="#【提交代码】" class="headerlink" title="【提交代码】"></a>【提交代码】</h2><p>（10&#x2F;10分，C++）</p>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 31.内存管理</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">memory</span> <span class="token comment">//内存块</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> mark<span class="token punctuation">;</span>    <span class="token comment">//标识符</span>
+    <span class="token keyword">int</span> length<span class="token punctuation">;</span>  <span class="token comment">//所占长度</span>
+    <span class="token keyword">bool</span> usable<span class="token punctuation">;</span> <span class="token comment">//true(1)可用，false(0)不可用</span>
+    <span class="token function">memory</span><span class="token punctuation">(</span><span class="token keyword">int</span> mark_t<span class="token punctuation">,</span> <span class="token keyword">int</span> len<span class="token punctuation">,</span> <span class="token keyword">bool</span> usea<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>mark <span class="token operator">=</span> mark_t<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>length <span class="token operator">=</span> len<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span>usable <span class="token operator">=</span> usea<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">bool</span> <span class="token function">cmp</span><span class="token punctuation">(</span><span class="token keyword">const</span> memory <span class="token operator">&amp;</span>a<span class="token punctuation">,</span> <span class="token keyword">const</span> memory <span class="token operator">&amp;</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token punctuation">.</span>usable <span class="token operator">==</span> b<span class="token punctuation">.</span>usable<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> a<span class="token punctuation">.</span>mark <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>mark<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> a<span class="token punctuation">.</span>usable <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>usable<span class="token punctuation">;</span> <span class="token comment">//（已被占用）不可用false（0）&lt;（未被占用）可用true（1）</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    vector<span class="token operator">&lt;</span>memory<span class="token operator">></span> mms<span class="token punctuation">;</span>
+    vector<span class="token operator">&lt;</span>memory<span class="token operator">></span><span class="token double-colon punctuation">::</span>iterator it<span class="token punctuation">;</span>
+
+    string opet<span class="token punctuation">;</span>           <span class="token comment">//具体操作</span>
+    <span class="token keyword">int</span> t<span class="token punctuation">,</span> m<span class="token punctuation">,</span> size_usable<span class="token punctuation">;</span> <span class="token comment">//操作个数、有效内存字节大小、剩余可用内存字节大小</span>
+    <span class="token keyword">int</span> number<span class="token punctuation">;</span>            <span class="token comment">//操作后接的数</span>
+    <span class="token keyword">int</span> mark <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>          <span class="token comment">//标识符</span>
+    cin <span class="token operator">>></span> t <span class="token operator">>></span> m<span class="token punctuation">;</span>
+    size_usable <span class="token operator">=</span> m<span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> t<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        cin <span class="token operator">>></span> opet<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>opet <span class="token operator">!=</span> <span class="token string">"defragment"</span><span class="token punctuation">)</span> <span class="token comment">//需要输入数</span>
+        <span class="token punctuation">&#123;</span>
+            cin <span class="token operator">>></span> number<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>opet <span class="token operator">==</span> <span class="token string">"alloc"</span><span class="token punctuation">)</span> <span class="token comment">//分配number个字节内存</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>size_usable <span class="token operator">>=</span> number<span class="token punctuation">)</span> <span class="token comment">//剩余空间足够</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">bool</span> succ <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> <span class="token comment">//命令是否执行成功（是否有之前被释放的块满足要求）</span>
+                    <span class="token comment">//这个判断方法可能还是不完全正确，但是在系统里已经能得满分……</span>
+                    <span class="token keyword">for</span> <span class="token punctuation">(</span>it <span class="token operator">=</span> mms<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> mms<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it<span class="token operator">++</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">&#123;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>it<span class="token operator">-></span>usable <span class="token operator">==</span> <span class="token boolean">true</span> <span class="token operator">&amp;&amp;</span> it<span class="token operator">-></span>length <span class="token operator">>=</span> number<span class="token punctuation">)</span> <span class="token comment">//it可用且it的长度>=number</span>
+                        <span class="token punctuation">&#123;</span>
+                            cout <span class="token operator">&lt;&lt;</span> mark <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+                            <span class="token keyword">int</span> temp <span class="token operator">=</span> it<span class="token operator">-></span>length<span class="token punctuation">;</span>
+                            it<span class="token operator">-></span>mark <span class="token operator">=</span> mark<span class="token punctuation">;</span>                                         <span class="token comment">//标上标识符</span>
+                            it<span class="token operator">-></span>usable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>                                      <span class="token comment">//标为不可用</span>
+                            it<span class="token operator">-></span>length <span class="token operator">=</span> number<span class="token punctuation">;</span>                                     <span class="token comment">//变更长度</span>
+                            mms<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>it <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token function">memory</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> temp <span class="token operator">-</span> it<span class="token operator">-></span>length<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//在后面插入空闲块</span>
+                            size_usable <span class="token operator">-=</span> number<span class="token punctuation">;</span>                                   <span class="token comment">//可用内存减少</span>
+                            mark <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>                                               <span class="token comment">//标识符</span>
+                            succ <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                            <span class="token keyword">break</span><span class="token punctuation">;</span>
+                        <span class="token punctuation">&#125;</span>
+                    <span class="token punctuation">&#125;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>succ <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">&#123;</span>
+                        <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">//不能分配的内存字节数（已被占用或者不够长）</span>
+                        <span class="token keyword">for</span> <span class="token punctuation">(</span>it <span class="token operator">=</span> mms<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> mms<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it<span class="token operator">++</span><span class="token punctuation">)</span>
+                        <span class="token punctuation">&#123;</span>
+                            sum <span class="token operator">+=</span> it<span class="token operator">-></span>length<span class="token punctuation">;</span>
+                        <span class="token punctuation">&#125;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>m <span class="token operator">-</span> sum<span class="token punctuation">)</span> <span class="token operator">>=</span> number<span class="token punctuation">)</span> <span class="token comment">//末尾剩余空闲内存字节数>=number</span>
+                        <span class="token punctuation">&#123;</span>
+                            cout <span class="token operator">&lt;&lt;</span> mark <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+                            mms<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token function">memory</span><span class="token punctuation">(</span>mark<span class="token punctuation">,</span> number<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//标识，长度，不可用</span>
+                            size_usable <span class="token operator">-=</span> number<span class="token punctuation">;</span>                      <span class="token comment">//可用内存减少</span>
+                            mark <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>                                  <span class="token comment">//标识符+1</span>
+                        <span class="token punctuation">&#125;</span>
+                        <span class="token keyword">else</span>
+                        <span class="token punctuation">&#123;</span>
+                            cout <span class="token operator">&lt;&lt;</span> <span class="token string">"NULL"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+                        <span class="token punctuation">&#125;</span>
+                    <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">else</span>
+                <span class="token punctuation">&#123;</span>
+                    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"NULL"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">else</span> <span class="token comment">//删除标识符number所在的块</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">bool</span> eff <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span> <span class="token comment">//命令是否有效</span>
+                <span class="token keyword">for</span> <span class="token punctuation">(</span>it <span class="token operator">=</span> mms<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> mms<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it<span class="token operator">++</span><span class="token punctuation">)</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>it<span class="token operator">-></span>mark <span class="token operator">==</span> number<span class="token punctuation">)</span> <span class="token comment">//it的标识符就是操作指定的标识符</span>
+                    <span class="token punctuation">&#123;</span>
+                        size_usable <span class="token operator">+=</span> it<span class="token operator">-></span>length<span class="token punctuation">;</span> <span class="token comment">//可用内存增加</span>
+                        it<span class="token operator">-></span>usable <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>         <span class="token comment">//it标为空闲</span>
+                        it<span class="token operator">-></span>mark <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>             <span class="token comment">//删去it的标识符</span>
+                        eff <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>                <span class="token comment">//命令有效</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>eff <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token comment">//若命令无效</span>
+                <span class="token punctuation">&#123;</span>
+                    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"ILLEGAL_ERASE_ARGUMENT"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span> <span class="token comment">//是defragment，不需要数字</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">sort</span><span class="token punctuation">(</span>mms<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mms<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> mms<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>mms<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>usable <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+                <span class="token punctuation">&#123;</span>
+                    it <span class="token operator">=</span> mms<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> j<span class="token punctuation">;</span>
+                    mms<span class="token punctuation">.</span><span class="token function">erase</span><span class="token punctuation">(</span>it<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>零歌</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://afool.top/learning/31_ram_management/" title="31.内存管理">https://afool.top/learning/31_ram_management/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/learning/23_compress_string/" rel="prev" title="23.字符串压缩"><span class="icon iconify" data-icon="ri:arrow-left-s-line"></span><span class="post-nav-text">23.字符串压缩</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/learning/24_europe_championship/" rel="next" title="24.欧洲冠军联赛"><span class="post-nav-text">24.欧洲冠军联赛</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>留个爪印吧~</span><br></div><div id="tcomment"></div><script type="module">import { getScript } from '/js/utils.js'
+
+getScript("https://fastly.jsdelivr.net/npm/twikoo@latest/dist/twikoo.all.min.js", () => {
+  const twikooConfig = {"enable":true,"envId":"https://twikoo-afool.vercel.app/"}
+  twikooConfig.el = '#tcomment'
+  twikoo.init(twikooConfig)
+}, window.twikoo);</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 零歌</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.9</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>

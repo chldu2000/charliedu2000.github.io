@@ -1,0 +1,498 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="零歌"><meta name="copyright" content="零歌"><meta name="generator" content="Hexo 6.3.0"><meta name="theme" content="hexo-theme-yun"><title>用单片机蜂鸣器播放音乐 | 愚人而已</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/svg+xml" href="/afool.svg"><link rel="mask-icon" href="/afool.svg" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"afool.top","root":"/","title":"愚人而已","version":"1.10.9","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="alternate" href="/atom.xml" title="愚人而已" type="application/atom+xml"><meta name="description" content="这是怎么一回事是的，我又来水了。 话说回来，虽然暑假开始已经将近两周了，但是我们并没有回家。为什么呢？ 你可知道这世上有一物唤作“小学期”吗？  每年暑假，我们学院大二的学生都会被拉到工训中心愉悦地学习课程，其名为——焊板子！（学会了，明天就进电子厂。）  好吧，其实正式名称应该是电子系统设计与创新基础训练，上面说的算是实训的一部分。在焊板子之外，我们要做的事情是通过学习各种案例理解其中的原理，最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用单片机蜂鸣器播放音乐">
+<meta property="og:url" content="https://afool.top/learning/stc-beep-music/">
+<meta property="og:site_name" content="愚人而已">
+<meta property="og:description" content="这是怎么一回事是的，我又来水了。 话说回来，虽然暑假开始已经将近两周了，但是我们并没有回家。为什么呢？ 你可知道这世上有一物唤作“小学期”吗？  每年暑假，我们学院大二的学生都会被拉到工训中心愉悦地学习课程，其名为——焊板子！（学会了，明天就进电子厂。）  好吧，其实正式名称应该是电子系统设计与创新基础训练，上面说的算是实训的一部分。在焊板子之外，我们要做的事情是通过学习各种案例理解其中的原理，最">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/07/13/Kz3emPhy7xDvNMu.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/07/13/YqjBUElkJ2VW8DX.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/07/13/ug95cZrwiSLT4dU.jpg">
+<meta property="article:published_time" content="2021-07-12T09:28:11.000Z">
+<meta property="article:modified_time" content="2022-11-07T08:43:40.846Z">
+<meta property="article:author" content="零歌">
+<meta property="article:tag" content="单片机">
+<meta property="article:tag" content="c">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/07/13/Kz3emPhy7xDvNMu.jpg"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="零歌"><img width="96" loading="lazy" src="/images/nekosense.jpeg" alt="零歌"></a><div class="site-author-name"><a href="/about/">零歌</a></div><span class="site-name">愚人而已</span><sub class="site-subtitle">以愚者之名攀上顶峰</sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">45</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">5</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">33</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:settings-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/charliedu2000" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=610609902" title="网易云音乐" target="_blank" style="color:#C20C0C"><span class="icon iconify" data-icon="ri:netease-cloud-music-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/22660607" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><span class="icon iconify" data-icon="ri:bilibili-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:charliedu2000@hotmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="旁友们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E6%98%AF%E6%80%8E%E4%B9%88%E4%B8%80%E5%9B%9E%E4%BA%8B"><span class="toc-number">1.</span> <span class="toc-text">这是怎么一回事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%9C%82%E9%B8%A3%E5%99%A8%E7%94%B5%E5%AD%90%E9%9F%B3%E4%B9%90"><span class="toc-number">2.</span> <span class="toc-text">蜂鸣器电子音乐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E4%BF%AE%E6%94%B9"><span class="toc-number">3.</span> <span class="toc-text">问题以及修改</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9F%B3%E9%AB%98"><span class="toc-number">3.1.</span> <span class="toc-text">音高</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E6%8B%8D"><span class="toc-number">3.2.</span> <span class="toc-text">节拍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%91%E6%AD%A2%E7%AC%A6"><span class="toc-number">3.3.</span> <span class="toc-text">休止符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">3.4.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E8%9C%82%E9%B8%A3%E5%99%A8%E5%94%B1%E8%B5%B7%E3%80%8A%E5%9B%BD%E9%99%85%E6%AD%8C%E3%80%8B"><span class="toc-number">4.</span> <span class="toc-text">让蜂鸣器唱起《国际歌》</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://afool.top/learning/stc-beep-music/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="零歌"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="愚人而已"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">用单片机蜂鸣器播放音乐</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2021-07-12 17:28:11" itemprop="dateCreated datePublished" datetime="2021-07-12T17:28:11+08:00">2021-07-12</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><span class="icon iconify" data-icon="ri:file-word-line"></span></span> <span title="本文字数">3.4k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><span class="icon iconify" data-icon="ri:timer-line"></span></span> <span title="阅读时长">14m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A5%87%E6%80%AA%E7%9A%84%E7%9F%A5%E8%AF%86%E5%A2%9E%E5%8A%A0%E4%BA%86/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">奇怪的知识增加了</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">单片机</span></a><a class="tag-item" href="/tags/c/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">c</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h2 id="这是怎么一回事"><a href="#这是怎么一回事" class="headerlink" title="这是怎么一回事"></a>这是怎么一回事</h2><p>是的，我又来水了。</p>
+<p>话说回来，虽然暑假开始已经将近两周了，但是我们并没有回家。为什么呢？</p>
+<p>你可知道这世上有一物唤作“小学期”吗？</p>
+<p><img src="https://i.loli.net/2021/07/13/Kz3emPhy7xDvNMu.jpg" alt="滑稽" loading="lazy"></p>
+<p>每年暑假，我们学院大二的学生都会被拉到工训中心愉悦地学习课程，其名为——焊板子！<del>（学会了，明天就进电子厂。）</del></p>
+<p><img src="https://i.loli.net/2021/07/13/YqjBUElkJ2VW8DX.jpg" alt="板子成品" loading="lazy"></p>
+<p>好吧，其实正式名称应该是电子系统设计与创新基础训练，上面说的算是实训的一部分。在焊板子之外，我们要做的事情是通过学习各种案例理解其中的原理，最终自己编程实现想要的功能。</p>
+<p>老师给我们提供了很多案例，不过根据观察，大家玩得最 High 的还是电子音乐，就是让蜂鸣器按指定的曲调发出声音。<del>（电子系统设计？不，是 8-bit 音乐大赏。）</del></p>
+<span id="more"></span>
+
+<h2 id="蜂鸣器电子音乐"><a href="#蜂鸣器电子音乐" class="headerlink" title="蜂鸣器电子音乐"></a>蜂鸣器电子音乐</h2><p>电子音乐的案例代码如下，感谢我校老师：</p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">/**********************
+myMusic 音乐播放
+型号:IAP15F2K60S2 主频:12MHz
+************************/</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;STC15F2K60S2.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">uint</span> <span class="token expression"><span class="token keyword">unsigned</span> <span class="token keyword">int</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">uchar</span> <span class="token expression"><span class="token keyword">unsigned</span> <span class="token keyword">char</span></span></span>
+
+<span class="token comment">/*---------引脚别名定义---------*/</span>
+sbit sbtBeep <span class="token operator">=</span> P3 <span class="token operator">^</span> <span class="token number">4</span><span class="token punctuation">;</span>    <span class="token comment">//蜂鸣器</span>
+
+<span class="token comment">/*---------变量定义---------*/</span>
+uchar ucTimerH<span class="token punctuation">,</span> ucTimerL<span class="token punctuation">;</span>   <span class="token comment">//定义定时器的重装值</span>
+uchar code arrMusic<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span>     <span class="token comment">//音乐代码，歌曲为《同一首歌》，格式为: 音符, 节拍</span>
+<span class="token punctuation">&#123;</span>
+<span class="token comment">//音符的十位代表是低中高八度，1代表高八度，2代表中八度，3代表高八度</span>
+<span class="token comment">//个位代表简谱的音符，例如0x15代表低八度的S0，0x21代表中八度的DO。</span>
+<span class="token comment">//节拍则是代表音长，例如：0x10代表一拍，0x20代表两拍，0x08代表1/2拍</span>
+<span class="token number">0x15</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span><span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x18</span><span class="token punctuation">,</span>
+<span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span>
+<span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x16</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span><span class="token number">0x15</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span>
+<span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x18</span><span class="token punctuation">,</span>
+<span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x30</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span>
+<span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x31</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x27</span><span class="token punctuation">,</span><span class="token number">0x18</span><span class="token punctuation">,</span><span class="token number">0x26</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x26</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span><span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x26</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x27</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x26</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span>
+<span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x18</span><span class="token punctuation">,</span><span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x26</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x25</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x24</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x23</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x22</span><span class="token punctuation">,</span><span class="token number">0x20</span><span class="token punctuation">,</span>
+<span class="token number">0x17</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x17</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span>
+<span class="token number">0x16</span><span class="token punctuation">,</span><span class="token number">0x08</span><span class="token punctuation">,</span><span class="token number">0x15</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span>
+<span class="token number">0x16</span><span class="token punctuation">,</span><span class="token number">0x10</span><span class="token punctuation">,</span><span class="token number">0x21</span><span class="token punctuation">,</span><span class="token number">0x40</span><span class="token punctuation">,</span>
+<span class="token number">0x00</span><span class="token punctuation">,</span><span class="token number">0x00</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+uchar code arrMusicToTimerNum<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span>  
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">//此数组数据为各个音符在定时器中的重装值，第一列是高位，第二列是低位</span>
+    <span class="token number">0xf8</span><span class="token punctuation">,</span> <span class="token number">0x8c</span><span class="token punctuation">,</span>   <span class="token comment">//低八度，低1</span>
+    <span class="token number">0xf9</span><span class="token punctuation">,</span> <span class="token number">0x5b</span><span class="token punctuation">,</span>
+    <span class="token number">0xfa</span><span class="token punctuation">,</span> <span class="token number">0x15</span><span class="token punctuation">,</span>   <span class="token comment">//低3</span>
+    <span class="token number">0xfa</span><span class="token punctuation">,</span> <span class="token number">0x67</span><span class="token punctuation">,</span>
+    <span class="token number">0xfb</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">,</span>   <span class="token comment">//低5</span>
+    <span class="token number">0xfb</span><span class="token punctuation">,</span> <span class="token number">0x90</span><span class="token punctuation">,</span>
+    <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0x0c</span><span class="token punctuation">,</span>   <span class="token comment">//低7</span>
+    <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0x44</span><span class="token punctuation">,</span>   <span class="token comment">//中央C调</span>
+    <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0xac</span><span class="token punctuation">,</span>   <span class="token comment">//中2</span>
+    <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x09</span><span class="token punctuation">,</span>
+    <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span>   <span class="token comment">//中4</span>
+    <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x82</span><span class="token punctuation">,</span>
+    <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0xc8</span><span class="token punctuation">,</span>   <span class="token comment">//中6</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x06</span><span class="token punctuation">,</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x22</span><span class="token punctuation">,</span>   <span class="token comment">//高八度，高1</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x56</span><span class="token punctuation">,</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x6e</span><span class="token punctuation">,</span>   <span class="token comment">//高3</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x9a</span><span class="token punctuation">,</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0xc1</span><span class="token punctuation">,</span>   <span class="token comment">//高5</span>
+    <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0xe4</span><span class="token punctuation">,</span>
+    <span class="token number">0xff</span><span class="token punctuation">,</span> <span class="token number">0x03</span>    <span class="token comment">//高7</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">/*---------延时子函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">DelayMs</span><span class="token punctuation">(</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> xms <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    uint i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span> i <span class="token operator">=</span> xms<span class="token punctuation">;</span> i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span> <span class="token punctuation">)</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span> j <span class="token operator">=</span> <span class="token number">124</span><span class="token punctuation">;</span> j <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> j<span class="token operator">--</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------取址子函数---------*/</span>
+<span class="token comment">//取出tem音符在arrMusicToTimerNum数组中的位置值</span>
+uchar <span class="token function">GetPosition</span><span class="token punctuation">(</span> uchar tem <span class="token punctuation">)</span> 
+<span class="token punctuation">&#123;</span>
+    uchar ucBase<span class="token punctuation">,</span> ucOffset<span class="token punctuation">,</span> ucPosition<span class="token punctuation">;</span>     <span class="token comment">//定义曲调，音符和位置</span>
+    ucBase <span class="token operator">=</span> tem <span class="token operator">/</span> <span class="token number">16</span><span class="token punctuation">;</span>            <span class="token comment">//高4位是曲调值,基址</span>
+    ucOffset <span class="token operator">=</span> tem <span class="token operator">%</span> <span class="token number">16</span><span class="token punctuation">;</span>          <span class="token comment">//低4位是音符，偏移量</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span> ucBase <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span>              <span class="token comment">//当曲调值为1时，即是低八度，基址为0</span>
+        ucBase <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span> ucBase <span class="token operator">==</span> <span class="token number">2</span> <span class="token punctuation">)</span>          <span class="token comment">//当曲调值为2时，即是中八度，基址为14</span>
+        ucBase <span class="token operator">=</span> <span class="token number">14</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span> ucBase <span class="token operator">==</span> <span class="token number">3</span> <span class="token punctuation">)</span>          <span class="token comment">//当曲调值为3时，即是高八度，基址为28</span>
+        ucBase <span class="token operator">=</span> <span class="token number">28</span><span class="token punctuation">;</span>
+    <span class="token comment">//通过基址加上偏移量，即可定位此音符在arrMusicToTimerNum数组中的位置</span>
+    ucPosition <span class="token operator">=</span> ucBase <span class="token operator">+</span> <span class="token punctuation">(</span> ucOffset <span class="token operator">-</span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span> 
+    <span class="token keyword">return</span> ucPosition<span class="token punctuation">;</span>            <span class="token comment">//返回这一个位置值</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------播放音乐功能函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">PlayMusic</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    uchar ucNoteTmp<span class="token punctuation">,</span> ucRhythmTmp<span class="token punctuation">,</span> tem<span class="token punctuation">;</span> <span class="token comment">// ucNoteTmp为音符，ucRhythmTmp为节拍</span>
+    uchar i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        ucNoteTmp <span class="token operator">=</span> arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">//如果碰到结束符,延时1秒,回到开始再来一遍</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span> ucNoteTmp <span class="token operator">==</span> <span class="token number">0x00</span> <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token function">DelayMs</span><span class="token punctuation">(</span> <span class="token number">1000</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span> ucNoteTmp <span class="token operator">==</span> <span class="token number">0xff</span> <span class="token punctuation">)</span>  <span class="token comment">//若碰到休止符,延时100ms,继续取下一音符</span>
+        <span class="token punctuation">&#123;</span>
+            i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+            <span class="token function">DelayMs</span><span class="token punctuation">(</span> <span class="token number">100</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+            TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>                     <span class="token comment">//正常情况下取音符和节拍</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">//取出当前音符在arrMusicToTimerNum数组中的位置值</span>
+            tem <span class="token operator">=</span> <span class="token function">GetPosition</span><span class="token punctuation">(</span> arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>              
+            <span class="token comment">//把音符相应的计时器重装载值赋予ucTimerH和ucTimerL</span>
+            ucTimerH <span class="token operator">=</span> arrMusicToTimerNum<span class="token punctuation">[</span>tem<span class="token punctuation">]</span><span class="token punctuation">;</span>  
+            ucTimerL <span class="token operator">=</span> arrMusicToTimerNum<span class="token punctuation">[</span>tem <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            i<span class="token operator">++</span><span class="token punctuation">;</span>
+            TH0 <span class="token operator">=</span> ucTimerH<span class="token punctuation">;</span>           <span class="token comment">//把ucTimerH和ucTimerL赋予计时器</span>
+            TL0 <span class="token operator">=</span> ucTimerL<span class="token punctuation">;</span>
+            ucRhythmTmp <span class="token operator">=</span> arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>      <span class="token comment">//取得节拍</span>
+            i<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        TR0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>                          <span class="token comment">//开定时器1</span>
+        <span class="token function">DelayMs</span><span class="token punctuation">(</span> ucRhythmTmp <span class="token operator">*</span> <span class="token number">180</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">//等待节拍完成, 通过P3^4口输出音频</span>
+        TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                          <span class="token comment">//关定时器1</span>
+
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------初始化子函数---------*/</span>
+<span class="token comment">//功能是配置IO口</span>
+<span class="token keyword">void</span> <span class="token function">InitSys</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    P0M0 <span class="token operator">=</span> <span class="token number">0xff</span><span class="token punctuation">;</span>
+    P0M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P2M0 <span class="token operator">=</span> <span class="token number">0x08</span><span class="token punctuation">;</span>
+    P2M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P3M0 <span class="token operator">=</span> <span class="token number">0x10</span><span class="token punctuation">;</span>
+    P3M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P4M0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P4M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P5M0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P5M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------定时器0初始化子函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">InitT0</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    TMOD <span class="token operator">=</span> <span class="token number">0x01</span><span class="token punctuation">;</span>
+    TH0 <span class="token operator">=</span> <span class="token number">0xD8</span><span class="token punctuation">;</span>
+    TL0 <span class="token operator">=</span> <span class="token number">0xEF</span><span class="token punctuation">;</span>
+    EA <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    ET0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------主函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">InitSys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitT0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    P0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    <span class="token function">PlayMusic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------定时器0中断处理函数---------*/</span>
+<span class="token comment">//重新装值，并把sbtBeep值取反，产生方波</span>
+<span class="token keyword">void</span> <span class="token function">T0_Process</span><span class="token punctuation">(</span><span class="token punctuation">)</span> interrupt <span class="token number">1</span>                     <span class="token comment">//计时器控制频率</span>
+<span class="token punctuation">&#123;</span>
+    TH0 <span class="token operator">=</span> ucTimerH<span class="token punctuation">;</span>
+    TL0 <span class="token operator">=</span> ucTimerL<span class="token punctuation">;</span>
+    sbtBeep <span class="token operator">=</span> <span class="token operator">~</span>sbtBeep<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p>头文件的内容就不贴了，主要是跟寄存器有关的。电子音乐工程有好几个版本，包括可以切换内容的、可以震动感应的，甚至还有可以显示歌词的……但是我现在要说的只需要用到上面这个（不要把偷懒说得这么堂而皇之啊喂）。</p>
+<h2 id="问题以及修改"><a href="#问题以及修改" class="headerlink" title="问题以及修改"></a>问题以及修改</h2><p>上面这个程序是让蜂鸣器以《同一首歌》的旋律发出声音，以“做中学”为准则的我院学生怎么能只听它唱呢？<del>最起码换成咱们的曲子。</del></p>
+<p>于是问题就出现了，当我们把自己选的曲子按格式写进去、构建程序并且下载之后，播放出来却很明显比预想的节奏快很多，而且时不时会有很怪的调调出现。除此之外，休止符的效果也不能让我们满意。</p>
+<h3 id="音高"><a href="#音高" class="headerlink" title="音高"></a>音高</h3><p>经过几次试验，我们发现音高的问题主要出现在高音3，这个音不对劲。那么怎么修改呢？</p>
+<p>根据原理说明和源代码，程序指定音高的时候是根据写入的音乐代码重定位到音符在定时器中的重装值。这个重装值又是什么？</p>
+<p><img src="https://i.loli.net/2021/07/13/ug95cZrwiSLT4dU.jpg" alt="简谱码" loading="lazy"></p>
+<p>这是课程网站给出的一张图。经过进制转换可以发现图中的简谱码就是前面所说的重装值。这样一来就好办了，老师给出的工程文件中高音3的重装值是<code>0xfe, 0x6e</code>，就是<code>0xff6e</code>，而高音3的简谱码<code>65157</code>转换成16进制应该是<code>0xfe85</code>，把重装值改成<code>0xfe, 0x85</code>就好了。</p>
+<p>同理，也可以用这种方式校准其它音，只要有简谱码，甚至可以实现半音和不在这个表格中的音。表格给出了一部分，不在这一部分的可以通过如下公式来计算：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/73525053.html">百度知道</a></p>
+<p>N&#x3D;Fi÷2÷Fr</p>
+<p>N：计数值</p>
+<p>Fi：内部计时频率12MHz，应该和硬件有关</p>
+<p>Fr：要产生的频率</p>
+<p>T&#x3D;65536-N&#x3D;65536-Fi÷2÷Fr </p>
+</blockquote>
+<p>T值就是我们需要的简谱码，转换成16进制就可以在程序中使用了。</p>
+<h3 id="节拍"><a href="#节拍" class="headerlink" title="节拍"></a>节拍</h3><p>音高的问题解决了，下面是节拍。源代码是这样写的：</p>
+<pre class="language-c" data-language="c"><code class="language-c">TR0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>                          <span class="token comment">//开定时器1</span>
+<span class="token function">DelayMs</span><span class="token punctuation">(</span> ucRhythmTmp <span class="token operator">*</span> <span class="token number">180</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">//等待节拍完成, 通过P3^4口输出音频</span>
+TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                          <span class="token comment">//关定时器1</span></code></pre>
+
+<p>其实节拍应该不算是个问题，因为不同歌曲的速度也会不同。经过试验（主要是听，毕竟不懂），我自己用的大部分歌曲改成这样会比较好：</p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token function">DelayMs</span><span class="token punctuation">(</span> ucRhythmTmp <span class="token operator">*</span> <span class="token number">360</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+
+<p>不过具体写多少还是取决于目标音乐的速度。</p>
+<h3 id="休止符"><a href="#休止符" class="headerlink" title="休止符"></a>休止符</h3><p>至于休止符，我在音符的重装值最后加上了<code>0xff,0xff</code>，只要当前音符是<code>0xn0</code>（n 不为0，因为<code>0x00</code>表示播放结束，回到开头），就让程序把重装值定位到42的位置（前面3个八度需要42个16进制数，从第0到第41），这样获取的重装值的高低位相等（其它的重装值还没有高低位相等的），直接关掉定时器再等待节拍，蜂鸣器在休止期间就不会发声。</p>
+<pre class="language-c" data-language="c"><code class="language-c">TR0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>                       <span class="token comment">// 开定时器1</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span> ucTimerH <span class="token operator">==</span> ucTimerL <span class="token punctuation">)</span>     <span class="token comment">// 是休止符直接关掉定时器</span>
+    TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">DelayMs</span><span class="token punctuation">(</span> parameter <span class="token punctuation">)</span><span class="token punctuation">;</span>          <span class="token comment">// 等待节拍完成</span>
+TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                       <span class="token comment">// 关定时器1</span></code></pre>
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>我还加上了根据音符来点亮不同数量 LED 灯的功能，实现了按键控制暂停和继续播放，<del>其实就是把其他案例复制粘贴。</del>除此之外，我把<code>PlayMusic</code>函数中<code>i</code>的类型从<code>uchar</code>改成<code>uint</code>来支持更长的音乐。</p>
+<p>好像没什么技术力的说……</p>
+<h2 id="让蜂鸣器唱起《国际歌》"><a href="#让蜂鸣器唱起《国际歌》" class="headerlink" title="让蜂鸣器唱起《国际歌》"></a>让蜂鸣器唱起《国际歌》</h2><p>上视频：</p>
+
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;">
+<iframe src="////player.bilibili.com/player.html?aid=461634310&bvid=BV16L411W7Ay&cid=370583013&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; height: 100%; Left: 0; top: 0;" ></iframe></div>
+
+
+<p>修改后的代码，没有定义半音：</p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">/**********************
+myMusic 音乐播放
+型号:IAP15F2K60S2 主频:12MHz
+************************/</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;STC15F2K60S2.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">uint</span> <span class="token expression"><span class="token keyword">unsigned</span> <span class="token keyword">int</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">uchar</span> <span class="token expression"><span class="token keyword">unsigned</span> <span class="token keyword">char</span></span></span>
+
+<span class="token comment">/*---------引脚别名定义---------*/</span>
+sbit sbtBeep <span class="token operator">=</span> P3 <span class="token operator">^</span> <span class="token number">4</span><span class="token punctuation">;</span>   <span class="token comment">// 蜂鸣器</span>
+sbit key1 <span class="token operator">=</span> P3 <span class="token operator">^</span> <span class="token number">2</span><span class="token punctuation">;</span>      <span class="token comment">// 按键1</span>
+sbit sbtLedSel <span class="token operator">=</span> P2 <span class="token operator">^</span> <span class="token number">3</span><span class="token punctuation">;</span> <span class="token comment">// 数码管与 LED 灯切换引脚</span>
+
+<span class="token comment">/*---------变量定义---------*/</span>
+uchar code arrLed<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0x00</span><span class="token punctuation">,</span> <span class="token number">0x01</span><span class="token punctuation">,</span> <span class="token number">0x03</span><span class="token punctuation">,</span> <span class="token number">0x07</span><span class="token punctuation">,</span> <span class="token number">0x0f</span><span class="token punctuation">,</span> <span class="token number">0x1f</span><span class="token punctuation">,</span> <span class="token number">0x3f</span><span class="token punctuation">,</span> <span class="token number">0x7f</span><span class="token punctuation">,</span> <span class="token number">0xff</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token comment">// LED 值</span>
+uchar ucTimerH<span class="token punctuation">,</span> ucTimerL<span class="token punctuation">;</span>                                                     <span class="token comment">// 定义定时器的重装值</span>
+bit flag<span class="token punctuation">;</span>                                                                     <span class="token comment">// 标志位，暂停或播放</span>
+uchar code arrMusic<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span>                                                       <span class="token comment">// 音乐代码，格式为: 音符, 节拍</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 音符的十位代表是低中高八度，1代表高八度，2代表中八度，3代表高八度</span>
+        <span class="token comment">// 个位代表简谱的音符，例如0x15代表低八度的S0，0x21代表中八度的DO。</span>
+        <span class="token comment">// 节拍则是代表音长，例如：0x10代表一拍，0x20代表两拍，0x08代表1/2拍</span>
+        <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x23</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x23</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span>
+        <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x23</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x23</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x0c</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span>
+        <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x0c</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x23</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x24</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x0c</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">,</span> <span class="token number">0x27</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x26</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x25</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span>
+        <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x35</span><span class="token punctuation">,</span> <span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span>
+        <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x33</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x18</span><span class="token punctuation">,</span> <span class="token number">0x32</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">,</span> <span class="token number">0x31</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">,</span>
+        <span class="token number">0x00</span><span class="token punctuation">,</span> <span class="token number">0x00</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+uchar code arrMusicToTimerNum<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 此数组数据为各个音符在定时器中的重装值，第一列是高位，第二列是低位</span>
+        <span class="token number">0xf8</span><span class="token punctuation">,</span> <span class="token number">0x8c</span><span class="token punctuation">,</span> <span class="token comment">// 低八度，低1</span>
+        <span class="token number">0xf9</span><span class="token punctuation">,</span> <span class="token number">0x5b</span><span class="token punctuation">,</span>
+        <span class="token number">0xfa</span><span class="token punctuation">,</span> <span class="token number">0x15</span><span class="token punctuation">,</span> <span class="token comment">// 低3</span>
+        <span class="token number">0xfa</span><span class="token punctuation">,</span> <span class="token number">0x67</span><span class="token punctuation">,</span>
+        <span class="token number">0xfb</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">,</span> <span class="token comment">// 低5</span>
+        <span class="token number">0xfb</span><span class="token punctuation">,</span> <span class="token number">0x90</span><span class="token punctuation">,</span>
+        <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0x0c</span><span class="token punctuation">,</span> <span class="token comment">// 低7</span>
+        <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0x44</span><span class="token punctuation">,</span> <span class="token comment">// 中央 C 调</span>
+        <span class="token number">0xfc</span><span class="token punctuation">,</span> <span class="token number">0xac</span><span class="token punctuation">,</span> <span class="token comment">// 中2</span>
+        <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x09</span><span class="token punctuation">,</span>
+        <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x34</span><span class="token punctuation">,</span> <span class="token comment">// 中4</span>
+        <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0x82</span><span class="token punctuation">,</span>
+        <span class="token number">0xfd</span><span class="token punctuation">,</span> <span class="token number">0xc8</span><span class="token punctuation">,</span> <span class="token comment">// 中6</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x06</span><span class="token punctuation">,</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x22</span><span class="token punctuation">,</span> <span class="token comment">// 高八度，高1</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x56</span><span class="token punctuation">,</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x85</span><span class="token punctuation">,</span> <span class="token comment">// 高3</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0x9a</span><span class="token punctuation">,</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0xc1</span><span class="token punctuation">,</span> <span class="token comment">// 高5</span>
+        <span class="token number">0xfe</span><span class="token punctuation">,</span> <span class="token number">0xe4</span><span class="token punctuation">,</span>
+        <span class="token number">0xff</span><span class="token punctuation">,</span> <span class="token number">0x03</span><span class="token punctuation">,</span> <span class="token comment">// 高7</span>
+        <span class="token number">0xff</span><span class="token punctuation">,</span> <span class="token number">0xff</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">/*---------延时子函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">DelayMs</span><span class="token punctuation">(</span>uint xms<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    uint i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> xms<span class="token punctuation">;</span> i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">124</span><span class="token punctuation">;</span> j <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span>
+            <span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------取址子函数---------*/</span>
+<span class="token comment">// 取出 tem 音符在 arrMusicToTimerNum 数组中的位置值</span>
+uchar <span class="token function">GetPosition</span><span class="token punctuation">(</span>uchar tem<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    uchar ucBase<span class="token punctuation">,</span> ucOffset<span class="token punctuation">,</span> ucPosition<span class="token punctuation">;</span> <span class="token comment">// 定义曲调、音符和位置</span>
+    ucBase <span class="token operator">=</span> tem <span class="token operator">/</span> <span class="token number">16</span><span class="token punctuation">;</span>                  <span class="token comment">// 高4位是曲调值，基址</span>
+    ucOffset <span class="token operator">=</span> tem <span class="token operator">%</span> <span class="token number">16</span><span class="token punctuation">;</span>                <span class="token comment">// 低4位是音符，偏移量</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ucOffset <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>                  <span class="token comment">// 当音符为0时，位置是42</span>
+    <span class="token punctuation">&#123;</span>
+        P0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">42</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 点亮对应数量的 LED</span>
+    P0 <span class="token operator">=</span> arrLed<span class="token punctuation">[</span>ucOffset<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ucBase <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// 当曲调值为1时，即是低八度，基址为0</span>
+        ucBase <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>ucBase <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">// 当曲调值为2时，即是中八度，基址为14</span>
+        ucBase <span class="token operator">=</span> <span class="token number">14</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>ucBase <span class="token operator">==</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">// 当曲调值为3时，即是高八度，基址为28</span>
+        ucBase <span class="token operator">=</span> <span class="token number">28</span><span class="token punctuation">;</span>
+    <span class="token comment">// 通过基址加上偏移量，即可定位此音符在 arrMusicToTimerNum 数组中的位置</span>
+    ucPosition <span class="token operator">=</span> ucBase <span class="token operator">+</span> <span class="token punctuation">(</span>ucOffset <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ucPosition<span class="token punctuation">;</span> <span class="token comment">// 返回这一个位置值</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------播放音乐功能函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">PlayMusic</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// ucNoteTmp 为音符，ucRhythmTmp 为节拍</span>
+    uchar ucNoteTmp<span class="token punctuation">,</span> ucRhythmTmp<span class="token punctuation">,</span> tem<span class="token punctuation">;</span>
+    <span class="token comment">// 这里把 uchar 型改成 uint 型，否则 i 最大为255，只能支持128个音符，甚至放不完《国际歌》的旋律</span>
+    uint i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// 播放状态</span>
+        <span class="token punctuation">&#123;</span>
+            ucNoteTmp <span class="token operator">=</span> arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ucNoteTmp <span class="token operator">==</span> <span class="token number">0x00</span><span class="token punctuation">)</span> <span class="token comment">// 如果碰到结束符,延时1秒,回到开始再来一遍</span>
+            <span class="token punctuation">&#123;</span>
+                i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                P0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+                sbtBeep <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token function">DelayMs</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">else</span> <span class="token comment">// 其他情况下取音符和节拍</span>
+            <span class="token punctuation">&#123;</span>
+                tem <span class="token operator">=</span> <span class="token function">GetPosition</span><span class="token punctuation">(</span>arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">// 取出当前音符在 arrMusicToTimerNum 数组中的位置值</span>
+                ucTimerH <span class="token operator">=</span> arrMusicToTimerNum<span class="token punctuation">[</span>tem<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 把音符相应的计时器重装载值赋予 ucTimerH 和 ucTimerL</span>
+                ucTimerL <span class="token operator">=</span> arrMusicToTimerNum<span class="token punctuation">[</span>tem <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                i<span class="token operator">++</span><span class="token punctuation">;</span>
+
+                TH0 <span class="token operator">=</span> ucTimerH<span class="token punctuation">;</span> <span class="token comment">// 把 ucTimerH 和 ucTimerL 赋予计时器</span>
+                TL0 <span class="token operator">=</span> ucTimerL<span class="token punctuation">;</span>
+                ucRhythmTmp <span class="token operator">=</span> arrMusic<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 取得节拍</span>
+                i<span class="token operator">++</span><span class="token punctuation">;</span>
+
+                TR0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>                  <span class="token comment">// 开定时器1</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>ucTimerH <span class="token operator">==</span> ucTimerL<span class="token punctuation">)</span> <span class="token comment">// 休止直接关掉定时器</span>
+                    TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token function">DelayMs</span><span class="token punctuation">(</span>ucRhythmTmp <span class="token operator">*</span> <span class="token number">300</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待节拍完成, 通过 P3^4 口输出音频</span>
+                TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                    <span class="token comment">// 关定时器1</span>
+                sbtBeep <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>flag <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// 暂停</span>
+                <span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------初始化子函数---------*/</span>
+<span class="token comment">// 功能是配置 IO 口</span>
+<span class="token keyword">void</span> <span class="token function">InitSys</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    P0M0 <span class="token operator">=</span> <span class="token number">0xff</span><span class="token punctuation">;</span>
+    P0M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P2M0 <span class="token operator">=</span> <span class="token number">0x08</span><span class="token punctuation">;</span>
+    P2M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P3M0 <span class="token operator">=</span> <span class="token number">0x10</span><span class="token punctuation">;</span>
+    P3M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P4M0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P4M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P5M0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    P5M1 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    sbtLedSel <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------定时器0初始化子函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">InitT0</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    TMOD <span class="token operator">=</span> <span class="token number">0x01</span><span class="token punctuation">;</span>
+    TH0 <span class="token operator">=</span> <span class="token number">0xD8</span><span class="token punctuation">;</span>
+    TL0 <span class="token operator">=</span> <span class="token number">0xEF</span><span class="token punctuation">;</span>
+    IE <span class="token operator">=</span> <span class="token number">0x87</span><span class="token punctuation">;</span> <span class="token comment">// 1000 0111  EA=1,EX0=1,ET0=1,EX1=0;</span>
+    IP <span class="token operator">=</span> <span class="token number">0x02</span><span class="token punctuation">;</span> <span class="token comment">// 0000 0010  PT0=1;   定时器0优先级高</span>
+    TR0 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    sbtBeep <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------主函数---------*/</span>
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">InitSys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitT0</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    P0 <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    key1 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    flag <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">PlayMusic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------定时器0中断处理函数---------*/</span>
+<span class="token comment">// 重新装值，并把 sbtBeep 值取反，产生方波</span>
+<span class="token keyword">void</span> <span class="token function">T0_Process</span><span class="token punctuation">(</span><span class="token punctuation">)</span> interrupt <span class="token number">1</span> <span class="token comment">// 计时器控制频率</span>
+<span class="token punctuation">&#123;</span>
+    TH0 <span class="token operator">=</span> ucTimerH<span class="token punctuation">;</span>
+    TL0 <span class="token operator">=</span> ucTimerL<span class="token punctuation">;</span>
+    sbtBeep <span class="token operator">=</span> <span class="token operator">~</span>sbtBeep<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*---------按键1中断处理函数---------*/</span>
+<span class="token comment">// 从其他案例抄过来的</span>
+<span class="token keyword">void</span> <span class="token function">ex1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> interrupt <span class="token number">0</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">DelayMs</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>key1 <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment">// 判断 key1 是否按下</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">DelayMs</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>key1 <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>key1<span class="token punctuation">)</span>
+                <span class="token punctuation">;</span>
+            flag <span class="token operator">=</span> <span class="token operator">~</span>flag<span class="token punctuation">;</span> <span class="token comment">// 播放中断位取反，播放或者暂停</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>零歌</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://afool.top/learning/stc-beep-music/" title="用单片机蜂鸣器播放音乐">https://afool.top/learning/stc-beep-music/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/learning/java-inheritance/" rel="prev" title="有关Java中类继承的二三事"><span class="icon iconify" data-icon="ri:arrow-left-s-line"></span><span class="post-nav-text">有关Java中类继承的二三事</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/diary/2021-middle/" rel="next" title="夏天的风和雨"><span class="post-nav-text">夏天的风和雨</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>留个爪印吧~</span><br></div><div id="tcomment"></div><script type="module">import { getScript } from '/js/utils.js'
+
+getScript("https://fastly.jsdelivr.net/npm/twikoo@latest/dist/twikoo.all.min.js", () => {
+  const twikooConfig = {"enable":true,"envId":"https://twikoo-afool.vercel.app/"}
+  twikooConfig.el = '#tcomment'
+  twikoo.init(twikooConfig)
+}, window.twikoo);</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 零歌</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.9</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></body></html>
