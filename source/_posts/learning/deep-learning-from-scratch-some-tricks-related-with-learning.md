@@ -210,3 +210,4 @@ $$ y_i \leftarrow \gamma \hat{x}_i + \beta $$
 
 ## 正则化
 
+### 过拟合
