@@ -4,17 +4,8 @@ date: 2021-07-10 23:36:31
 keywords: 链接
 description: 有点意思哦
 comments: true
-random: true
 links: https://afool.top/links.json
-#   - 
-#     url: https://noionion.top/
-#     avatar: http://pub-noionion.oss-cn-hangzhou.aliyuncs.com/head.jpg
-#     name: noionion
-#     blog: 贰猹的小窝
-#     desc: 用这生命中的每一秒，给自己一个不后悔的未来
-#     color: "#0078e7"
-#     email: noionion@outlook.com
-#   - 
+random: true
 ---
 
 ## 说明
