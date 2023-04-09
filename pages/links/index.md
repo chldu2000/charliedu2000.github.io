@@ -8,6 +8,8 @@ links: https://afool.top/links.json
 random: true
 ---
 
+<YunLinks :links="frontmatter.links" :random="frontmatter.random" />
+
 ## 说明
 
 申请友链的话提供这些信息就行：）
