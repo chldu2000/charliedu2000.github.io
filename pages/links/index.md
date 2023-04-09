@@ -1,0 +1,45 @@
+---
+title: 旁友们
+date: 2021-07-10 23:36:31
+keywords: 链接
+description: 有点意思哦
+comments: true
+random: true
+links: https://afool.top/links/links.json
+#   - 
+#     url: https://noionion.top/
+#     avatar: http://pub-noionion.oss-cn-hangzhou.aliyuncs.com/head.jpg
+#     name: noionion
+#     blog: 贰猹的小窝
+#     desc: 用这生命中的每一秒，给自己一个不后悔的未来
+#     color: "#0078e7"
+#     email: noionion@outlook.com
+#   - 
+---
+
+## 说明
+
+申请友链的话提供这些信息就行：）
+
+```yaml
+url: # 站点链接
+avatar: # 头像地址
+name: # 昵称
+blog: # 站点名称
+desc: # 一句中二与否都可以的描述
+color: # 代表色，格式如："#0078e7" 
+email: # 电子邮箱，非必须
+```
+
+我的友链信息：
+
+```yaml
+url: https://afool.top/
+avatar: https://afool.top/images/nekosense.jpeg
+name: 零歌
+blog: 愚人而已
+desc: 以愚者之名攀上顶峰
+color: "#00d5ff"
+email: charliedu2000@hotmail.com
+```
+
