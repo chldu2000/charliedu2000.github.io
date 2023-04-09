@@ -5,7 +5,7 @@ keywords: 链接
 description: 有点意思哦
 comments: true
 random: true
-links: https://afool.top/links/links.json
+links: https://afool.top/links.json
 #   - 
 #     url: https://noionion.top/
 #     avatar: http://pub-noionion.oss-cn-hangzhou.aliyuncs.com/head.jpg
