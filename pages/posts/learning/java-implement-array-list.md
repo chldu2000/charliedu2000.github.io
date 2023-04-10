@@ -5,6 +5,7 @@ tags:
 categories:
   - 快去学习
 date: 2021-08-16 14:37:32
+updated: 2021-08-16 14:37:32
 ---
 
 `ArrayList` 是一种常用的数据结构，经常被拿来和 `LinkedList` 等进行对比。跟单纯的数组比起来，`ArrayList` 拥有许多使用方便的方法~~，可谓居家旅行摸鱼 coding 必备之利器~~。

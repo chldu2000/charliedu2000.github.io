@@ -1,10 +1,15 @@
 ---
-title: "一时兴起给电脑安装双系统"
-categories: [ "奇怪的知识增加了" ]
-tags: [ "双系统","Linux","Manjaro" ]
+title: 一时兴起给电脑安装双系统
+categories: 
+  - 奇怪的知识增加了
+tags:
+  - 双系统
+  - Linux
+  - Manjaro
 draft: false
 slug: "51"
-date: "2020-11-20 00:16:00"
+date: 2020-11-20 00:16:00
+updated: 2020-11-20 00:16:00
 ---
 
 >记事性质，并不是安装攻略哦……

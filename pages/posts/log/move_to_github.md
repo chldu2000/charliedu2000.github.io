@@ -1,8 +1,9 @@
 ---
 title: "把站点迁移到GitHub"
-categories: [ "往事如烟" ]
+categories: [ "站点里程碑" ]
 tags: [ "blog" ]
 date: 2021-05-23T22:57:20+08:00
+updated: 2021-05-23T22:57:20+08:00
 draft: false
 slug: "move_to_github"
 ---

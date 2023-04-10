@@ -1,10 +1,14 @@
 ---
 title: "弱冠之年"
-categories: [ "往事如烟" ]
-tags: [ "杂记","我的人生" ]
+categories: 
+  - 往事如烟
+tags: 
+  - 杂记
+  - 我的人生
 draft: false
 slug: "49"
-date: "2020-11-01 02:03:00"
+date: 2020-11-01 02:03:00
+updated: 2020-11-01 02:03:00
 excerpt_type: html
 ---
 

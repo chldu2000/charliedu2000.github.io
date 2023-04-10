@@ -4,7 +4,8 @@ categories: [ "奇怪的知识增加了" ]
 tags: [ "i3wm" ]
 draft: false
 slug: "59"
-date: "2021-04-09 22:43:00"
+date: 2021-04-09 22:43:00
+updated: 2021-04-09 22:43:00
 ---
 
 ## i3wm配置
