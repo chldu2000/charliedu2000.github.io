@@ -1,0 +1,614 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "愚人而已",
+    "home_page_url": "https://afool.top/",
+    "feed_url": "https://afool.top/feed.json",
+    "description": "敬请见证！（bushi",
+    "icon": "https://afool.top/images/nekosense.jpeg",
+    "author": {
+        "name": "零歌",
+        "url": "https://valaxy.site"
+    },
+    "items": [
+        {
+            "id": "",
+            "content_html": "<p>今天下班，望着渐渐从深蓝转为漆黑的天色，我脑子里冒出的第一句话是：“啊？已经秋天了吗？”但事实上，秋天已经过去一半了。这几天，下午六点的时候夜幕就已落下，回到出租屋的第一件事也不再是打开空调了。意识到这一点，另一个念头在我脑中生成：“我来这里有两个多月了吧……”</p>\n<p>残酷的事实，鄙人不幸，已经正式成为了社会人，不复学生时代的纯真，向着大概率是房奴车奴的未来滑翔而去。</p>\n<p>罢了，不管怎样，这也算一个新的开始，“记录”这一仪式照常进行。</p>\n",
+            "url": "https://afool.top/posts/memory/after-two-months-in-shanghai",
+            "title": "上海生活两月谈",
+            "date_modified": "2023-09-26T21:09:11.000Z",
+            "date_published": "2023-09-26T21:09:11.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><meting-js id=\"1449782341\" server=\"netease\" type=\"song\" theme=\"#C20C0C\"></meting-js></p>\n<h2>首：结束了，但又没结束</h2>\n<p>实在是奇怪，据我观察，大家写总结一类的东西一般会是在年终这段时间，而每次我自己想起要总结一下过去总是在大概6、7月份。可能是因为学生的一年结束在6月吧。<s>有没有一种可能是自己太懒，一直拖到现在……</s></p>\n<p>那么，我生命中的又一年马上就要结束了，我的学生时代也将就此落幕。一段故事的结束是另一段故事的开始，我不知道新的故事会如何。不过在踏上生命的新征程之前，短暂地回顾一下刚走过的路也是一种还算有趣的仪式。</p>\n",
+            "url": "https://afool.top/posts/memory/graduate-from-university",
+            "title": "写在即将毕业时",
+            "date_modified": "2023-05-29T15:13:41.000Z",
+            "date_published": "2023-05-29T15:13:41.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><meting-js id=\"1403087332\" server=\"netease\" type=\"song\" theme=\"#C20C0C\"></meting-js></p>\n<h2>弯道上</h2>\n<p>最近在考驾照，科二的曲线行驶练了好久也没掌握诀窍，凭感觉走总是会溜向一侧然后压线，就好像我的车轮下面有块肥皂似的（往左/右边打——打——快压线了还浑然不觉——真的压线了）。无奈，只好想办法看点位。在教练“从现象找原因”的方法论的指导下，我总算看出来实线大概到哪里我就应该转……</p>\n<p>所幸，经过两次约考，我的科二终于在这周过了，希望接下来能一路顺风。先提前感谢我的教练（教得确实很细致，练习过程中还能听到大佬丰富的人生阅历），感谢父母的经济支持，再谢谢我自己（doge）。</p>\n<p><s>第一把简直完美——直到最后压了个线，那个瞬间我心里是崩溃的……</s></p>\n",
+            "url": "https://afool.top/posts/memory/drift-on-curves",
+            "title": "在弯道漂行",
+            "date_modified": "2023-04-21T20:51:15.000Z",
+            "date_published": "2023-04-21T20:51:15.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>为什么用 valaxy</h2>\n<ul>\n<li>快，想在本地看到效果的话比 hexo 快太多了。yyj 赛高！</li>\n<li>部署更方便，自带 workflow，只要更新源文件就能自动在指定分支生成页面文件。懒人福音。~</li>\n</ul>\n",
+            "url": "https://afool.top/posts/log/hello-valaxy",
+            "title": "hello-valaxy",
+            "date_modified": "2023-04-10T00:29:43.000Z",
+            "date_published": "2023-04-10T00:29:43.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><strong>施工中</strong></p>\n<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n<li>[上述书籍作者提供的代码](<a href=\"https://github.com/oreilly-japan/\">https://github.com/oreilly-japan/</a></li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-cnn",
+            "title": "深度学习入门：卷积神经网络",
+            "date_modified": "2022-11-24T22:52:03.000Z",
+            "date_published": "2022-11-24T22:52:03.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><strong>施工中</strong></p>\n<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n<li>[上述书籍作者提供的代码](<a href=\"https://github.com/oreilly-japan/\">https://github.com/oreilly-japan/</a></li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-some-tricks-related-with-learning",
+            "title": "深度学习入门：与学习相关的技巧",
+            "date_modified": "2022-11-04T23:36:13.000Z",
+            "date_published": "2022-11-04T23:36:13.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n<li>[上述书籍作者提供的代码](<a href=\"https://github.com/oreilly-japan/deep-lear\">https://github.com/oreilly-japan/deep-lear</a></li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-error-back-propagation",
+            "title": "深度学习入门：误差反向传播法",
+            "date_modified": "2022-10-17T23:06:12.000Z",
+            "date_published": "2022-10-17T23:06:12.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n<li>[上述书籍作者提供的代码](<a href=\"https://github.com/oreilly-japan/deep-lear\">https://github.com/oreilly-japan/deep-lear</a></li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-learning-of-neural-network",
+            "title": "深度学习入门：神经网络的学习",
+            "date_modified": "2022-10-07T23:18:35.000Z",
+            "date_published": "2022-10-07T23:18:35.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n<li>[上述书籍作者提供的代码](<a href=\"https://github.com/oreilly-japan/deep-lear\">https://github.com/oreilly-japan/deep-lear</a></li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-neural-network",
+            "title": "深度学习入门：神经网络",
+            "date_modified": "2022-10-05T21:17:12.000Z",
+            "date_published": "2022-10-05T21:17:12.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>内容参考：</p>\n<ul>\n<li>《深度学习入门：基于 Python 的理论与实现》(斋藤康毅)</li>\n</ul>\n<h2>感知机</h2>\n<p>感知机（指“人工神经元”或“朴素感知机”）接收多个输入信号，输出一个信号。感知机的信号只有1和0两</p>\n",
+            "url": "https://afool.top/posts/learning/deep-learning-from-scratch-perception",
+            "title": "深度学习入门：感知机",
+            "date_modified": "2022-10-01T21:38:41.000Z",
+            "date_published": "2022-10-01T21:38:41.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p><strong>到官</strong></p>\n<p>元 范梈</p>\n<p>陶公到官八十日，今我到官逾半期。</p>\n<p>劝农省俗了无补，暖衣饱食将何为？</p>\n<p>常思在山深虎豹，几曾当道假狐狸？</p>\n<p>英雄见义犹饥渴，可使文人有</p>\n</blockquote>\n",
+            "url": "https://afool.top/posts/reading/trying-to-analyze-dao-guan",
+            "title": "尝试分析《到官》这首诗",
+            "date_modified": "2022-09-14T00:02:39.000Z",
+            "date_published": "2022-09-14T00:02:39.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>这里放一些有关 Linux 的东西，有一些日常使用的感受，还有一些通过选修课等方式学到的、或多或少会用到的技巧。</p>\n<p><em>正在施工中，可以查看大体框架的准备情况。</em></p>\n",
+            "url": "https://afool.top/posts/things/some-linux-tips",
+            "title": "some-linux-tips",
+            "date_modified": "2022-08-23T11:09:33.000Z",
+            "date_published": "2022-08-23T11:09:33.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><a href=\"https://github.com/charliedu2000/chamber\">Chamber</a> 是什么？一个自娱自乐的小玩具，非常简单的聊天工具。</p>\n<p>它有极其简洁的 TUI，</p>\n<p>*项目还在施</p>\n",
+            "url": "https://afool.top/posts/things/a-toy-for-chatting-chamber",
+            "title": "Chamber：聊天小玩具",
+            "date_modified": "2022-08-12T20:51:45.000Z",
+            "date_published": "2022-08-12T20:51:45.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p><img src=\"https://s2.loli.net/2022/06/21/S24u6PzL1iKlt7x.jpg\" alt=\"klein-no-tsubo-by-futari-okajima\"></p>\n<p>《克莱因壶</p>\n</blockquote>\n",
+            "url": "https://afool.top/posts/reading/klein-no-tsubo-by-futari-okajima",
+            "title": "真实轰然崩塌——冈岛二人《克莱因壶》",
+            "date_modified": "2022-06-21T07:39:55.000Z",
+            "date_published": "2022-06-21T07:39:55.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><s>这是一篇水文。</s></p>\n<h2>为什么写了这个么东西呢？</h2>\n<p>这是个好问题，动机永远是关键。第一点呢，我这个人玩心很重，能不做任务就绝对不会做，用一切时间来玩（或者睡），在玩的过程中逐渐有了自己做个游戏的想法。正巧托室友的福，我发现了这个项目合集：<a href=\"https://github.com/codecrafters-io/build-your-own-x\">Build your own x</a>，里面有好几个小游戏的实现教程。至于第二点，我最近对 Rust 比较感兴趣，还心血来潮用它写了个课程实验。看到合集里有 Rust 的游戏，我觉得有点惊喜，就选了一个跟着做一下。</p>\n",
+            "url": "https://afool.top/posts/learning/write-a-roguelike-game-with-tcod-rs",
+            "title": "用 tcod-rs 写个游戏，所以……",
+            "date_modified": "2022-05-15T23:45:35.000Z",
+            "date_published": "2022-05-15T23:45:35.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>生产者消费者模型</h2>\n<p><s>书接上回……<a href=\"https://afool.top/learning/java-thread/\">Java 中的多线程编程？</a>……</s></p>\n<p>要讨论多线程问题，生产</p>\n",
+            "url": "https://afool.top/posts/learning/java-thread-producer-and-consumer",
+            "title": "生产者消费者模型",
+            "date_modified": "2021-10-07T19:37:53.000Z",
+            "date_published": "2021-10-07T19:37:53.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>你是否经常感到空虚寂寞、百无聊赖？你是否缺少陪伴、倍感不安、想要在这喧嚣的城市里寻找一份慰藉？</p>\n<p>毫无疑问，拥有属于自己的车、房可以在物质层面缓解这些焦虑（确信）。买房太难了，所以就先从车开始吧。</p>\n<h2>三轮车也是车</h2>\n<p>打住，我要说的并不是这种车：</p>\n<p><img src=\"https://i.loli.net/2021/09/26/ln7xH36LUbiZc9O.png\" alt=\"车1网图\"></p>\n<p><img src=\"https://i.loli.net/2021/09/26/GHQzW9Xd73DqvNF.png\" alt=\"车2网图\"></p>\n<p>或者这种车：</p>\n<p><img src=\"https://i.loli.net/2021/09/26/E3CDyXLPTh5qFfS.png\" alt=\"蝙蝠车网图\"></p>\n<p><s>废话，你以为我买得起？</s></p>\n<p>而是这种：</p>\n<p><img src=\"https://i.loli.net/2021/09/26/En4idsW7mopQIlw.png\" alt=\"三蹦子\"></p>\n<p>什么？这不行？气抖冷，难道三轮车就不是车？玩具车就不能给慰藉了？</p>\n",
+            "url": "https://afool.top/posts/learning/how-to-own-a-tricycle",
+            "title": "如何拥有一辆属于自己的三蹦子",
+            "date_modified": "2021-09-26T18:56:38.000Z",
+            "date_published": "2021-09-26T18:56:38.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>首先，什么是线程</h2>\n<p>在讨论“线程”这个概念之前，我们有必要知道它到底是什么。这个词经常和&quot;进程&quot;一起出现，那么这两者有什么区别呢？</p>\n<p>进程是对 CPU 活动的称呼，简单说来就是执行的</p>\n",
+            "url": "https://afool.top/posts/learning/java-thread",
+            "title": "Java 中的多线程编程？",
+            "date_modified": "2021-09-19T14:25:17.000Z",
+            "date_published": "2021-09-19T14:25:17.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><code>ArrayList</code> 是一种常用的数据结构，经常被拿来和 <code>LinkedList</code> 等进行对比。跟单纯的数组比起来，<code>ArrayList</code> 拥有许多使用方便的方法~~，可谓居家旅行摸鱼 coding 必备之利器~~。</p>\n<p>~~虽然还没有多少实战经验，~~我们还是来尝试实现一个具有增删改查等基本功能的 <code>ArrayList</code> 吧。</p>\n<p><img src=\"https://i.loli.net/2021/08/17/1f8iAd2xUr9BcNR.jpg\" alt=\"菜狗\"></p>\n",
+            "url": "https://afool.top/posts/learning/java-implement-array-list",
+            "title": "如何实现一个 Array List",
+            "date_modified": "2021-08-16T14:37:32.000Z",
+            "date_published": "2021-08-16T14:37:32.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>Object 类是什么</h2>\n<p><s>众所周知，</s><code>Object</code> 是 Java 中所有类的父类。当我们定义类的时候如果没有指定这个类继承的父类，默认父类就是 <code>Object</code> 。所以</p>\n",
+            "url": "https://afool.top/posts/learning/java-object-class",
+            "title": "对 Object 类的不完全解析",
+            "date_modified": "2021-08-13T14:42:55.000Z",
+            "date_published": "2021-08-13T14:42:55.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>接口是什么</h2>\n<p><strong>Java接口</strong>是一系列方法的声明，是一些方法特征的集合，一个<strong>接口</strong>只有方法的特征没有方法的实现，这些方法可以在不同的地方被不同的类实现，而这些实现可以具有不同的</p>\n",
+            "url": "https://afool.top/posts/learning/java-interface",
+            "title": "java-interface",
+            "date_modified": "2021-08-06T13:44:25.000Z",
+            "date_published": "2021-08-06T13:44:25.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>不问不知道，一问才发现之前学得实在太水，好多东西都没怎么搞明白。</p>\n</blockquote>\n<h2>继承是什么</h2>\n<p>继承是面向对象的三个基本特征之一，它使得子类具有父类的属性和方法或者重新定义、追加属性和方法等。</p>\n",
+            "url": "https://afool.top/posts/learning/java-inheritance",
+            "title": "有关Java中类继承的二三事",
+            "date_modified": "2021-08-04T17:00:21.000Z",
+            "date_published": "2021-08-04T17:00:21.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>这是怎么一回事</h2>\n<p>是的，我又来水了。</p>\n<p>话说回来，虽然暑假开始已经将近两周了，但是我们并没有回家。为什么呢？</p>\n<p>你可知道这世上有一物唤作“小学期”吗？</p>\n<p><img src=\"https://i.loli.net/2021/07/13/Kz3emPhy7xDvNMu.jpg\" alt=\"滑稽\"></p>\n<p>每年暑假，我们学院大二的学生都会被拉到工训中心愉悦地学习课程，其名为——焊板子！<s>（学会了，明天就进电子厂。）</s></p>\n<p><img src=\"https://i.loli.net/2021/07/13/YqjBUElkJ2VW8DX.jpg\" alt=\"板子成品\"></p>\n<p>好吧，其实正式名称应该是电子系统设计与创新基础训练，上面说的算是实训的一部分。在焊板子之外，我们要做的事情是通过学习各种案例理解其中的原理，最终自己编程实现想要的功能。</p>\n<p>老师给我们提供了很多案例，不过根据观察，大家玩得最 High 的还是电子音乐，就是让蜂鸣器按指定的曲调发出声音。<s>（电子系统设计？不，是 8-bit 音乐大赏。）</s></p>\n",
+            "url": "https://afool.top/posts/learning/stc-beep-music",
+            "title": "用单片机蜂鸣器播放音乐",
+            "date_modified": "2021-07-12T17:28:11.000Z",
+            "date_published": "2021-07-12T17:28:11.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><meting-js id=\"499027\" server=\"netease\" type=\"song\" theme=\"#C20C0C\"></meting-js></p>\n<h2>快来点凉风吧</h2>\n<p>这几天还是和往常一样闷热，我有点怀疑自己是不是在蒸桑拿。正好考试周刚过，就躺在床上不动好了，既省力又不会被外面的酷暑打扰。</p>\n<p>躺着是不可能就只是躺着的，经过考试的洗礼，我不禁对自己过去一段时间的生活和学习产生了深深的怀疑。<s>（笑，希望不要又是死不悔改）。</s></p>\n<p><img src=\"https://i.loli.net/2021/07/02/6eLrusJTcW4w3jG.gif\" alt=\"emmm\"></p>\n",
+            "url": "https://afool.top/posts/memory/2021-middle",
+            "title": "夏天的风和雨",
+            "date_modified": "2021-07-02T22:48:31.000Z",
+            "date_published": "2021-07-02T22:48:31.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>起因</h2>\n<p>原因很简单，为了节省服务器经费~~（钱包空空）~~，服务器摆在那里，资源也没有充分利用起来。</p>\n",
+            "url": "https://afool.top/posts/log/move_to_github",
+            "title": "把站点迁移到GitHub",
+            "date_modified": "2021-05-23T14:57:20.000Z",
+            "date_published": "2021-05-23T14:57:20.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>这里是空调房</h2>\n<p>这个空调来自这里：<a href=\"https://www.yunyoujun.cn/posts/air-conditioner/\">云游君的小站-便携小空调</a>。</p>\n<p>看起来蛮有趣的，<s>空调房最适合摸鱼了</s>。</p>\n",
+            "url": "https://afool.top/posts/things/install_air_conditioner",
+            "title": "夏天到了，开个空调",
+            "date_modified": "2021-05-15T00:12:00.000Z",
+            "date_published": "2021-05-15T00:12:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>拆掉邪恶博士的炸弹</h2>\n<blockquote>\n<p>这是一个课程实验，感觉有点意思，就记录一下吧。</p>\n<p>分析可能不准确，仅供参考。</p>\n</blockquote>\n<h3>邪恶博士的幽默感</h3>\n<pre><code>/***************************************************************************\n * Dr. Evil's Insidious Bomb, Version 1.1\n * Copyright 2011, Dr. Evil Incorporated. All rights reserved.\n *\n * LICENSE:\n *\n * Dr. Evil Incorporated (the PERPETRATOR) hereby grants you (the\n * VICTIM) explicit permission to use this bomb (the BOMB).  This is a\n * time limited license, which expires on the death of the VICTIM.\n * The PERPETRATOR takes no responsibility for damage, frustration,\n * insanity, bug-eyes, carpal-tunnel syndrome, loss of sleep, or other\n * harm to the VICTIM.  Unless the PERPETRATOR wants to take credit,\n * that is.  The VICTIM may not distribute this bomb source code to\n * any enemies of the PERPETRATOR.  No VICTIM may debug,\n * reverse-engineer, run &quot;strings&quot; on, decompile, decrypt, or use any\n * other technique to gain knowledge of and defuse the BOMB.  BOMB\n * proof clothing may not be worn when handling this program.  The\n * PERPETRATOR will not apologize for the PERPETRATOR's poor sense of\n * humor.  This license is null and void where the BOMB is prohibited\n * by law.\n ***************************************************************************/\n</code></pre>\n<p>满满的中二之感，连我都看不惯了，解之。</p>\n<p>由于我们并没有完整的源代码，只能通过汇编代码来尝试推出博士<s>这个邪恶的刀客塔</s>到底在炸弹里做了些什么手脚了。</p>\n",
+            "url": "https://afool.top/posts/learning/csapp_bomblab",
+            "title": "BombLab实验",
+            "date_modified": "2021-05-14T23:52:00.000Z",
+            "date_published": "2021-05-14T23:52:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h1>程序的机器级表示</h1>\n<p>2020-2021-2 计算机系统</p>\n<h2>控制</h2>\n<h3>处理器状态</h3>\n<ul>\n<li>当前运行运行程序的相关信息：\n<ul>\n<li>临时数据（%eax等通用寄存器）；</li>\n</ul>\n</li>\n</ul>\n",
+            "url": "https://afool.top/posts/learning/machine_level_representation_of_programs",
+            "title": "3.程序的机器级表示",
+            "date_modified": "2021-04-26T20:29:35.000Z",
+            "date_published": "2021-04-26T20:29:35.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>i3wm配置</h2>\n<blockquote>\n<p>i3wm的配置备份，基本只写了非默认的部分。</p>\n</blockquote>\n",
+            "url": "https://afool.top/posts/things/i3wm_config_backup",
+            "title": "i3wm配置备份",
+            "date_modified": "2021-04-09T22:43:00.000Z",
+            "date_published": "2021-04-09T22:43:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h1>2020-2021-2 计算机系统</h1>\n<p>2020-2021学年第二学期 计算机系统</p>\n<p>基于32位系统</p>\n<p>随上课进度更新</p>\n<h2>位、字节与信息存储</h2>\n<h3>机器字长</h3>\n",
+            "url": "https://afool.top/posts/learning/bit_byte_and_information_storage",
+            "title": "2.位、字节与信息存储",
+            "date_modified": "2021-04-04T00:13:00.000Z",
+            "date_published": "2021-04-04T00:13:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h1>2020-2021-2 计算机系统</h1>\n<p>2020-2021学年第二学期 计算机系统</p>\n<p>基于32位系统</p>\n<p>随上课进度更新</p>\n<h2>汇编初步</h2>\n<h3>机器指令</h3>\n<pre><code class=\"language-tx\"></code></pre>\n",
+            "url": "https://afool.top/posts/learning/assembly",
+            "title": "1.汇编初步",
+            "date_modified": "2021-03-10T15:26:00.000Z",
+            "date_published": "2021-03-10T15:26:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>起因</h2>\n<p>之前从老师那里白嫖到一套英文版的《冰与火之歌》，正巧最近感觉自己阅读量大不如前，也是为了复习英语（大概吧），开始写《冰与火之歌》的读书笔记吧。</p>\n<h2>笔记内容</h2>\n<p>可能会</p>\n",
+            "url": "https://afool.top/posts/reading/read_a_song_of_ice_and_fire",
+            "title": "开始读《冰与火之歌》",
+            "date_modified": "2021-03-08T22:46:04.000Z",
+            "date_published": "2021-03-08T22:46:04.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>最近的阅读实在潦草，读完这部小说也有好多天了，许多关于书中内容的地方可能不太准确，之后有机会可能会得出更有价值的感想。</p>\n</blockquote>\n",
+            "url": "https://afool.top/posts/reading/read_kara_no_kyoukai",
+            "title": "短记：《空之境界》",
+            "date_modified": "2021-01-18T22:40:43.000Z",
+            "date_published": "2021-01-18T22:40:43.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>记事性质，并不是安装攻略哦……<br>\n已经换Arch了（2021.4）</p>\n</blockquote>\n<p>本着闲着没事就爱做些乱七八糟的事情的原则，也是在对Linux的好奇心的驱使下，我在笔记本上折腾了双系统。<br>\n不过说来也有些矛盾，虽然我十分想探索Linux这块对我来说还是未知的领域，但是我却害怕把电脑搞坏掉……为了减少翻车的机率，我提前做了很多调查（其实就是在贴吧、知乎等网站上面看文章），发现Manjaro可能装起来比较省心，于是我就下手了。</p>\n",
+            "url": "https://afool.top/posts/things/install_dual_os",
+            "title": "一时兴起给电脑安装双系统",
+            "date_modified": "2020-11-20T00:16:00.000Z",
+            "date_published": "2020-11-20T00:16:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p><img src=\"https://i.loli.net/2021/06/07/IkMvK5JRe3XYxAf.jpg\" alt=\"晚上的橘子洲\"></p>\n<blockquote>\n<p>20岁，还是就这样悄无声息地来了。今天和往常并没有什么不同，还是一个为了赶作业而忙碌的周日。我一般懒得为一个日子做些花里胡哨的纪念，但是不为自己做点什么又总觉得缺了点东西，想来想去，还是做个简单的总结吧。这可能很傻，也可能很是必要。</p>\n</blockquote>\n<p>在某种程度上，“弱冠之年”被人们赋予了很多意义，这会让我们觉得到了这个年纪总要做出点什么特别的事情。但是随着时间流逝，就我个人而言，认识到自己的平凡才是最不同寻常的成就。</p>\n",
+            "url": "https://afool.top/posts/memory/20_years_old",
+            "title": "弱冠之年",
+            "date_modified": "2020-11-01T02:03:00.000Z",
+            "date_published": "2020-11-01T02:03:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>昨天下午第一次参加CCF考试，学院要求至少要过150分，经过暑假刷题，进考场前感觉问题不大。<br>\n前两题确实简单，二十多分钟，一遍过，但是后三题很明显就有了难度，还有一些新知识要现场掌握，尽力“偷”</p>\n",
+            "url": "https://afool.top/posts/memory/take_ccf_examination",
+            "title": "第一次参加CCF考试",
+            "date_modified": "2020-09-14T22:03:00.000Z",
+            "date_published": "2020-09-14T22:03:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>这是今年春季学期选修课《电影与哲学》的期末作业中的一部分。没有经过多少修改，权当练习了。</p>\n<p>里面的很多感想都是我自己的想法，是“真切”还是“矫情”？这个一时半会儿还真说不清呢。</p>\n</blockquote>\n",
+            "url": "https://afool.top/posts/writing/a_winter_day",
+            "title": "冬日山途",
+            "date_modified": "2020-09-03T21:50:00.000Z",
+            "date_published": "2020-09-03T21:50:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>问题描述</h2>\n<p>请实现一个铁路购票系统的简单座位分配算法，来处理一节车厢的座位分配。<br>\n　　假设一节车厢有20排、每一排5个座位。为方便起见，我们用1到100来给所有的座位编号，第一排是1到5号，第二排是6到10号，依次类推，第20排是96到100号。<br>\n　　购票时，一个人可能购一张或多张票，最多不超过5张。如果这几张票可以安排在同一排编号相邻的座位，则应该安排在编号最小的相邻座位。否则应该安排在编号最小的几个空座位中（不考虑是否相邻）。<br>\n　　假设初始时车票全部未被购买，现在给了一些购票指令，请你处理这些指令。</p>\n",
+            "url": "https://afool.top/posts/learning/ccf201609_2_train_ticket",
+            "title": "CCF201609-2 火车购票",
+            "date_modified": "2020-09-03T15:40:00.000Z",
+            "date_published": "2020-09-03T15:40:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎指出。<br>\n更正：代码156、167行“+=”改为“-=”，另外比赛场次可以用n*(n-1)/2而不用C(n,2)，题目有提到……</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>2018年俄罗斯世界杯结束了，法国获得冠军，全世界球迷度过了一个非常愉快的夏天。作为中国球迷，不能总是看别人踢球，这不福利来了，根据FIFA（国际足联）及全体成员协会的一致决定，2118年世界杯将在中国举办，作为东道主，中国队将无需参加预选赛而直接参加决赛阶段的比赛。</p>\n<p>比赛规则如下：</p>\n<p>总共n（n为偶数）个球队参加比赛</p>\n<p>按照分组赛积分排名，前n/2的球队进入淘汰赛</p>\n<p>积分排名的规则如下：球队获胜得3分，平局得1分，失利得0分，按照积分递减、净胜球递减以及进球数递减方式排名</p>\n<p>编写一个程序，根据给出的参赛队伍名单和所有比赛的结果，找出成功进入淘汰赛阶段的球队名单。</p>\n",
+            "url": "https://afool.top/posts/learning/39_world_cup",
+            "title": "39.世界杯来了",
+            "date_modified": "2020-08-31T16:17:07.000Z",
+            "date_published": "2020-08-31T16:17:07.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>二叉树是一种非常重要的数据结构，非常多其他数据结构都是基于二叉树的基础演变而来的。对于二叉树，深度遍历有前序、中序以及后序三种遍历方法。</p>\n<p>三种基本的遍历思想为：</p>\n<p>前序遍历：根结点 ---&gt; 左子树 ---&gt; 右子树</p>\n<p>中序遍历：左子树---&gt; 根结点 ---&gt; 右子树</p>\n<p>后序遍历：左子树 ---&gt; 右子树 ---&gt; 根结点</p>\n<p>比如，求以下二叉树的各种遍历</p>\n<p><img src=\"https://i.loli.net/2021/07/15/rZYeQKcuTz92Mwj.png\" alt=\"二叉树\"></p>\n<p>前序遍历：1  2  4  5  7  8  3  6</p>\n<p>中序遍历：4  2  7  5  8  1  3  6</p>\n<p>后序遍历：4  7  8  5  2  6  3  1</p>\n<p>需要你编写程序解决的问题是：已知一个二叉树的前序遍历和中序遍历的结果，给出该二叉树的后序遍历的结果。</p>\n",
+            "url": "https://afool.top/posts/learning/35_traversing_binary_tree",
+            "title": "35.二叉树遍历，从前序、中序到后序",
+            "date_modified": "2020-08-28T11:53:03.000Z",
+            "date_published": "2020-08-28T11:53:03.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>问题描述</h2>\n<p>小明现在在学习多项式的展开：就是把一个形如</p>\n<p>（x+a1） （x+a2） ... （x+an）</p>\n<p>展开成如下形式：</p>\n<p>x^n + b1x^(n-1) + b2x^(n-2) + ... + bn-1^x + bn</p>\n<p>比如 （x+1）（x+2）=x^2 + 3x + 2</p>\n<p>(x+1)^3 = x^3 +3x^2 +3x + 1</p>\n<p>小明做了很多练习，但是不知道对错，现在请求你的帮助，判断小明的展开式是否正确。</p>\n",
+            "url": "https://afool.top/posts/learning/56_equal_polynomial",
+            "title": "56.相等的多项式",
+            "date_modified": "2020-08-27T14:05:00.000Z",
+            "date_published": "2020-08-27T14:05:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>经过几天的折腾，这个网站总算变得有了个模样。<br>\n我会在这里做什么呢？我也说不定，也许主要是分享一些想法和学习上的心得吧。<br>\n那……不管你是谁，欢迎你！</p>\n",
+            "url": "https://afool.top/posts/log/2020.8.26",
+            "title": "2020.8.26",
+            "date_modified": "2020-08-26T19:33:00.000Z",
+            "date_published": "2020-08-26T19:33:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>Vasya有几本电话簿，记录了他的朋友们的电话号码，每一个朋友都可以有一或几个电话号码。</p>\n<p>Vasya决定整理关于朋友电话号码的信息。给定n个字符串，来自于Vasya的电话簿中的条目。每一条都以朋友的姓名开头，然后跟着当前条目中的电话号码个数，然后是本人的电话号码。有可能几个相同的电话被记录在同一个记录中。</p>\n<p>Vasya还认为，如果电话号码a是电话号码b的后缀（也就是说，号码b以a结尾），这两个号码被当作同一个电话号码，那么a被认为是无城市代码，它不应该被考虑。</p>\n<p>输出整理后Vasya朋友的电话号码信息。有可能两个不同的人有相同的号码。如果一个人有两个电话号码x和y，x是y的后缀（即y以x结尾），则不输出x。</p>\n<p>如果Vasya的电话簿中的某些朋友记录了几次，那么只需要记录一次。</p>\n",
+            "url": "https://afool.top/posts/learning/9_phone_number",
+            "title": "9.电话号码",
+            "date_modified": "2020-08-25T20:55:00.000Z",
+            "date_published": "2020-08-25T20:55:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>给定一个由n个小写字母组成的字符串s，需要使用最少数量的钱币来压缩它。</p>\n<p>压缩该字符串，必须将s表示为多个相互连接的非空字符串: s=t1t2...tk，其中第 i 个字符串按照下列两种方法之一编码：</p>\n<p>如果|ti|=1，也就是说 ti为单个字符组成的字符串，编码时需要支付a个钱币</p>\n<p>如果ti是t1t2...ti-1的子串，编码时需要支付b个钱币</p>\n<p>你的任务是计算压缩给定的字符串需要花费的最小钱币数。</p>\n",
+            "url": "https://afool.top/posts/learning/23_compress_string",
+            "title": "23.字符串压缩",
+            "date_modified": "2020-08-25T14:23:33.000Z",
+            "date_published": "2020-08-25T14:23:33.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>离第一个操作系统HNU-OS发布已经没有多少时间了，但它的一些组件还没有完成，内存管理器就是其中之一。根据开发人员的计划，在第一个版本中，内存管理器将非常简单和直观。它将支持三个操作：</p>\n",
+            "url": "https://afool.top/posts/learning/31_ram_management",
+            "title": "31.内存管理",
+            "date_modified": "2020-08-25T00:08:00.000Z",
+            "date_published": "2020-08-25T00:08:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>个人思路仅供参考，如有不足欢迎交流。</p>\n</blockquote>\n<h2>【问题描述】</h2>\n<p>欧洲冠军联赛常被誉为全世界最具影响力的俱乐部级赛事。在比赛的小组赛阶段，欧洲的各个足球俱乐部被分为八个小组，每个小组中四支球队。每个小组中的球队按照如下规则排序：</p>\n<p>球队会根据比赛结果获得积分。一场比赛的双方被称为主队和客队。如果其中一方进球数多于另一方，那么进球较多的一方获得3 分，另一方获得0 分。如果双方打成平手，则各得1分。</p>\n<p>球队的净胜球数是其进球数减去失球数（不考虑该球队在比赛中作为主队还是客队）。</p>\n<p>积分较高的球队排名更加靠前。</p>\n<p>如果两支球队积分相同，那么净胜球数较多的球队排名靠前。</p>\n<p>小组的各队伍进行循环赛，即每两支球队之间进行两场比赛，双方交替作为主队。给定一个小组内12 场比赛的结果，请求出小组的出线队伍：即排名第一和第二的两支球队。</p>\n<p>保证答案唯一。</p>\n",
+            "url": "https://afool.top/posts/learning/24_europe_championship",
+            "title": "24.欧洲冠军联赛",
+            "date_modified": "2020-08-23T23:26:00.000Z",
+            "date_published": "2020-08-23T23:26:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<h2>【问题描述】</h2>\n<p>谷歌、百度等搜索引擎已经成为了互连网中不可或缺的一部分。在本题中，你的任务也是设计一个搜索论文的搜索引擎，当然，本题的要求比起实际的需求要少了许多。</p>\n<p>本题的输入将首先给出一系列的论文，对于每篇论文首先给出标题，然后给出它被引用的次数。然后会有一系列的搜索询问，询问标题中包含特定关键词的论文有哪些。</p>\n<p>每一个询问可能包含多个关键词，你需要找出标题包含所有关键词的论文。“包含”必须是标题中有一个词正好是给定的关键词，不区分大小写。</p>\n<p>对每个询问，都按被引用的次数从多到少输出满足条件的论文的标题。如果有被引用的次数相同的论文，则按照论文在输入中的顺序排列，先给出的论文排在前面。</p>\n",
+            "url": "https://afool.top/posts/learning/19_engine_string",
+            "title": "19.Engine-字符串",
+            "date_modified": "2020-08-22T22:58:00.000Z",
+            "date_published": "2020-08-22T22:58:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<blockquote>\n<p>2020年3月5日</p>\n</blockquote>\n<p>天地间原本冷寂</p>\n<p>此刻却渐渐变得嘈杂</p>\n<p>在每一个角落</p>\n<p>生命慢慢发芽</p>\n<p>灰暗的逐渐有了色彩</p>\n<p>蛰伏的也从梦里归来</p>\n",
+            "url": "https://afool.top/posts/writing/insects_awaken",
+            "title": "惊蛰",
+            "date_modified": "2020-08-22T20:36:00.000Z",
+            "date_published": "2020-08-22T20:36:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>这个站点从今天开始建设</p>\n",
+            "url": "https://afool.top/posts/log/2020.8.22",
+            "title": "2020.8.22",
+            "date_modified": "2020-08-22T19:05:00.000Z",
+            "date_published": "2020-08-22T19:05:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        },
+        {
+            "id": "",
+            "content_html": "<p>如果您看到这篇文章,表示您的 blog 已经安装成功.</p>\n",
+            "url": "https://afool.top/posts/log/welcome_Typecho",
+            "title": "欢迎使用 Typecho",
+            "date_modified": "2020-08-22T19:03:00.000Z",
+            "date_published": "2020-08-22T19:03:00.000Z",
+            "author": {
+                "name": "零歌",
+                "url": "https://valaxy.site"
+            }
+        }
+    ]
+}
