@@ -17,21 +17,23 @@ excerpt_type: html
 
 ## 参考
 
-[Stable LFS](https://www.linuxfromscratch.org/lfs/view/stable/)
+[Stable LFS（12.1）](https://www.linuxfromscratch.org/lfs/view/stable/)
 
 [Linux From Scratch (LFS) 编译记录 – Vinfall@Geekademy](https://blog.vinfall.com/posts/2022/09/lfs/)
 
 [适用于 Linux 的 Windows 子系统文档](https://learn.microsoft.com/zh-cn/windows/wsl/)
 
-## 准备
+[LFS Packages Mirror](https://iso.mirrors.ustc.edu.cn/lfs/lfs-packages/lfs-packages-12.1.tar)
+
+## 准备构建
+
+### 宿主系统
+
+LFS 对宿主系统的要求在[Chapter 2.2](https://www.linuxfromscratch.org/lfs/view/stable/chapter02/hostreqs.html)。
 
 4 核 8G 的硬件应该不是问题吧（笑）。
 
-### 软件依赖
-
-LFS 的软件依赖在[Chapter 2.2](https://www.linuxfromscratch.org/lfs/view/stable/chapter02/hostreqs.html)，可以用文档中提供的脚本快速检查。
-
-我的 WSL 是 [Arch](https://github.com/yuk7/ArchWSL)，我记得装上后没有进行别的操作，安装 `base-devel` 和 `python` 之后就满足要求了。不过别的发行版软件包组名字可能不同，你也可以直接安装脚本提示缺少的包。
+可以用文档中提供的脚本快速检查软件需求。我用的发行版是 [Arch](https://github.com/yuk7/ArchWSL)，我记得装上后没有进行别的操作，安装 `base-devel` 和 `python` 之后就满足要求了。不过别的发行版软件包组名字可能不同，你也可以直接安装脚本提示缺少的包。
 
 ```bash
  ./version-check.sh
@@ -93,12 +95,13 @@ Mount-VHD : 无法将“Mount-VHD”项识别为 cmdlet、函数、脚本文件�
 \\.\PhysicalDrive
 ```
 
-[Mount-VHD](https://learn.microsoft.com/zh-cn/powershell/module/hyper-v/mount-vhd?view=windowsserver2022-ps) 是 Hyper-V 的命令，我就去看了我电脑上是不是打开了 Hyper-V（启用或关闭 Windows 功能），结果没打开，没打开……连 WSL 都没勾选…，只选了一个虚拟机平台……那我是怎么装上这个 ArchWSL 的？
+[Mount-VHD](https://learn.microsoft.com/zh-cn/powershell/module/hyper-v/mount-vhd?view=windowsserver2022-ps) 是 Hyper-V 的命令，我就去看了我电脑上是不是打开了 Hyper-V（启用或关闭 Windows 功能），结果没打开，没打开……连 WSL 都没勾选，只选了一个虚拟机平台……那我是怎么装上这个 ArchWSL 的？
 
 暂时抛下这些问题，打开 Hyper-V 和 WSL，重启电脑，再用管理员权限执行命令：
 
 ```powershell
-# 从微软商店获取的 WSL 可以直接装在 VHD，不过我这里好像不行
+# wsl --mount "\\.\PhysicalDrive$((Mount-VHD -Path ./lfs.vhdx -PassThru | Get-Disk).Number)" --bare 也行
+# 后面折腾的时候发现微软商店装的 WSL 可以直接：wsl --mount --vhd <path-to-vhd-file> --bare
  Write-Output "\\.\PhysicalDrive$((Mount-VHD -Path ./lfs.vhdx -PassThru | Get-Disk).Number)"
 \\.\PhysicalDrive1
  wsl --mount \\.\PhysicalDrive1 --bare
@@ -118,7 +121,7 @@ Sector size (logical/physical): 512 bytes / 4096 bytes
 I/O size (minimum/optimal): 4096 bytes / 4096 bytes
 ```
 
-新挂载的虚拟磁盘是 `/dev/sdc`，接下来可以用 `fdisk` 分区，但我对 `fdisk`，不是很熟悉，每一步都得看帮助，所以我用了 `cfdisk`——有简单的 UI，操作更方便一点。
+新挂载的虚拟磁盘是 `/dev/sdc`。接下来可以用 `fdisk` 分区，但我对 `fdisk` 不是很熟悉，每一步都得看帮助，所以我用了 `cfdisk`——有简单的 UI，操作更方便一点。
 
 ```bash
  sudo cfdisk /dev/sdc
@@ -143,10 +146,26 @@ Device     Start      End  Sectors Size Type
 
 ```bash
  sudo mkfs -v -t ext4 /dev/sdc1
- mkdir /mnt/wsl/vhd-sdc1
- sudo mount /dev/sdc1 /mnt/wsl/vhd-sdc1/
+ mkdir /mnt/wsl/vhd-lfs
+ sudo mount /dev/sdc1 /mnt/wsl/vhd-lfs/
 ```
 
-创建 LFS 环境变量的时候要用自己的挂载目录，我这里就是在 `root` 和普通用户的 `bashrc` 里面加上 `export LFS=/mnt/wsl/vhd-sdc1`。
+创建 LFS 环境变量的时候要用自己的挂载目录，我这里就是在 `root` 和普通用户的 `bashrc` 里面加上 `export LFS=/mnt/wsl/vhd-lfs`。
 
-Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新挂载分区，编辑 `/etc/fstab` 实现自动挂载的方法在 WSL 上不生效，正在尝试其他办法……
+#### 自动挂载
+
+Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新挂载分区，更糟的是，在 WSL 中，自己创建的挂载点重启后会消失，所以编辑 `/etc/fstab` 实现自动挂载的方法就不能用了。
+
+另外，Windows 重启之后还会分离 VHD，需要到磁盘管理再附加上去才能拿到磁盘标识并挂载。幸好我的 WSL（不是指发行版）是在微软商店装的，可以直接挂载 VHD 文件：
+
+```powershell
+# 已经分区的磁盘需要指定要挂载的分区，我只有一个分区，就指定 1
+ wsl --mount --vhd C:\Users\charl\MyTools\ArchWSL\lfs.vhdx -p 1 --name vhd-lfs
+已成功将磁盘装载为“/mnt/wsl/vhd-lfs”。
+注意： 如果已修改 /etc/wsl.conf 中的 automount.root 设置，则位置将不同。
+若要卸载和分离磁盘，请运行“wsl.exe --unmount \\?\C:\Users\charl\MyTools\ArchWSL\lfs.vhdx”。
+```
+
+那自动挂载的方案就呼之欲出了，就是在重启之后自动执行上面这条命令。我找到的方法是把这条命令写进 `ps1` 脚本，创建一个计划任务，当我登录的时候让 PowerShell 用最高权限执行脚本。
+
+### 软件
