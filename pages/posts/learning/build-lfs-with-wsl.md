@@ -2,7 +2,7 @@
 layout: post
 title: 在 WSL 上构建 LFS
 date: 2024-04-04 00:23:38
-updated: 2024-04-04 00:23:38
+updated: 2024-04-05 00:23:38
 tags:
   - Linux
   - LFS
@@ -18,6 +18,8 @@ excerpt_type: html
 ## 参考
 
 [Stable LFS（12.1）](https://www.linuxfromscratch.org/lfs/view/stable/)
+
+[LFS 12.1 中文翻译](https://lfs.xry111.site/zh_CN/12.1/index.html)
 
 [Linux From Scratch (LFS) 编译记录 – Vinfall@Geekademy](https://blog.vinfall.com/posts/2022/09/lfs/)
 
@@ -150,7 +152,7 @@ Device     Start      End  Sectors Size Type
  sudo mount /dev/sdc1 /mnt/wsl/vhd-lfs/
 ```
 
-创建 LFS 环境变量的时候要用自己的挂载目录，我这里就是在 `root` 和普通用户的 `bashrc` 里面加上 `export LFS=/mnt/wsl/vhd-lfs`。
+创建 LFS 环境变量的时候要用自己的挂载目录，我这里就是在 `root` 和普通用户的 `.bashrc` 里面加上 `export LFS=/mnt/wsl/vhd-lfs`。
 
 #### 自动挂载
 
@@ -168,4 +170,55 @@ Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新
 
 那自动挂载的方案就呼之欲出了，就是在重启之后自动执行上面这条命令。我找到的方法是把这条命令写进 `ps1` 脚本，创建一个计划任务，当我登录的时候让 PowerShell 用最高权限执行脚本。
 
-### 软件
+### 软件、“lfs” 用户和其他
+
+按照文档上给的步骤操作就行，需要注意的就是给 lfs 用户创建 `.bashrc` 的时候 `LFS` 变量值要换成自己的挂载点。
+
+`MAKEFLAGS` 里面用的核数先设了 `-j6`。
+
+## Toolchain
+
+这里就开始用 lfs 用户了。以编译 `binutils` 为例：
+
+```bash
+# 最好检查一下变量
+echo $LFS
+
+# 注意“编译过程的一般说明”，先解压源码，再到源码目录下构建
+tar xf binutils-2.42.tar.xz
+cd binutils-2.42
+
+mkdir -v build
+cd build/
+
+time { \
+../configure --prefix=$LFS/tools \
+             --with-sysroot=$LFS \
+             --target=$LFS_TGT   \
+             --disable-nls       \
+             --enable-gprofng=no \
+             --disable-werror    \
+             --enable-default-hash-style=gnu && \
+make && make install; }
+
+real    0m34.804s
+user    1m48.477s
+sys     0m9.644s
+
+# 结束后清理目录
+cd $LFS/sources/
+rm -rf binutils-2.42
+```
+
+[Vinfall 的记录](https://blog.vinfall.com/posts/2022/09/lfs/#%E6%9E%84%E5%BB%BA-toolchain-%E5%92%8C-chroot-%E7%8E%AF%E5%A2%83)提到了第一次编译 `gcc` 时目录的坑，我做的时候 [LFS 文档](https://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc-pass1.html)里面已经有了关于这点的提示。
+
+编译 `gcc` 用的时间比我预想得短一些：
+
+```bash
+# gcc 13.2.0, pass 1
+time { make; }
+
+real    5m29.212s
+user    25m52.521s
+sys     1m20.544s
+```
