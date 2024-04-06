@@ -11,9 +11,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "valaxy": "0.14.25",
-    "valaxy-addon-twikoo": "^0.0.1",
-    "valaxy-theme-yun": "0.14.25"
+    "valaxy": "^0.18.5",
+    "valaxy-addon-twikoo": "^0.0.3",
+    "valaxy-theme-yun": "^0.18.5"
   },
   "devDependencies": {
     "typescript": "^4.8.4"

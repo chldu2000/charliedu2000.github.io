@@ -1,7 +1,7 @@
 ---
 title: "3.程序的机器级表示"
 categories: [ "快去学习" ]
-tags: [  ]
+tags: [ "学习笔记", "汇编" ]
 draft: false
 slug: "60"
 date: 2021-04-26 20:29:35

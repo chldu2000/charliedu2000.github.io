@@ -9,7 +9,7 @@ export default defineSiteConfig({
     name: '零歌',
     avatar: 'https://afool.top/images/nekosense.jpeg'
   },
-  description: '敬请见证！（bushi',
+  description: '我们活着',
   favicon: 'https://afool.top/afool.svg',
   social: [
     // {

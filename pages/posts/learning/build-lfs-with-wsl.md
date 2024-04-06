@@ -2,7 +2,7 @@
 layout: post
 title: 在 WSL 上构建 LFS
 date: 2024-04-04 00:23:38
-updated: 2024-04-05 00:23:38
+updated: 2024-04-06 00:23:38
 tags:
   - Linux
   - LFS
@@ -178,7 +178,9 @@ Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新
 
 ## Toolchain
 
-这里就开始用 lfs 用户了。以编译 `binutils` 为例：
+这里就开始用 lfs 用户了。
+
+以编译 `binutils` 为例：
 
 ```bash
 # 最好检查一下变量
@@ -191,6 +193,7 @@ cd binutils-2.42
 mkdir -v build
 cd build/
 
+# binutils 2.42 pass 1
 time { \
 ../configure --prefix=$LFS/tools \
              --with-sysroot=$LFS \
@@ -216,9 +219,14 @@ rm -rf binutils-2.42
 
 ```bash
 # gcc 13.2.0, pass 1
+# 讲道理应该连 configure 和 make install 一起计时的
 time { make; }
 
 real    5m29.212s
 user    25m52.521s
 sys     1m20.544s
 ```
+
+后面的编译步骤按文档上面的来就行。
+
+## Chroot 环境

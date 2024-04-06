@@ -6,7 +6,7 @@ tags:
   - TUI
   - chat room
 categories:
-  - 奇怪的知识增加了
+  - 有趣的东西
 date: 2022-08-12 20:51:45
 updated: 2022-08-12 20:51:45
 ---

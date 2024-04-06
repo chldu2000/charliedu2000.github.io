@@ -1,6 +1,6 @@
 ---
 title: "夏天到了，开个空调"
-categories: [ "奇怪的知识增加了" ]
+categories: [ "有趣的东西" ]
 tags: [ "玩具" ]
 draft: false
 slug: "75"

@@ -4,7 +4,7 @@ tags:
   - Linux
   - Unix
 categories:
-  - 奇怪的知识增加了
+  - 有趣的东西
 date: 2022-08-23 11:09:33
 updated: 2022-08-23 11:09:33
 ---

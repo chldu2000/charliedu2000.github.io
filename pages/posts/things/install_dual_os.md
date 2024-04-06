@@ -1,7 +1,7 @@
 ---
 title: 一时兴起给电脑安装双系统
 categories: 
-  - 奇怪的知识增加了
+  - 有趣的东西
 tags:
   - 双系统
   - Linux

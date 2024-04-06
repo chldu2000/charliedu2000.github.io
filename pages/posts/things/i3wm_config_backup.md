@@ -1,6 +1,6 @@
 ---
 title: "i3wm配置备份"
-categories: [ "奇怪的知识增加了" ]
+categories: [ "有趣的东西" ]
 tags: [ "i3wm" ]
 draft: false
 slug: "59"

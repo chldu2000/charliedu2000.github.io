@@ -1,7 +1,7 @@
 ---
 title: "欢迎使用 Typecho"
 categories: [ "站点里程碑" ]
-tags: [  ]
+tags: [ "Typecho" ]
 draft: false
 slug: "start"
 date: 2020-08-22 19:03:00
