@@ -2,7 +2,7 @@
 layout: post
 title: 在 WSL 上构建 LFS
 date: 2024-04-04 00:23:38
-updated: 2024-04-06 00:23:38
+updated: 2024-04-07 00:23:38
 tags:
   - Linux
   - LFS
@@ -33,7 +33,7 @@ excerpt_type: html
 
 LFS 对宿主系统的要求在[Chapter 2.2](https://www.linuxfromscratch.org/lfs/view/stable/chapter02/hostreqs.html)。
 
-4 核 8G 的硬件应该不是问题吧（笑）。
+4 核 8G 的硬件应该不是问题吧（笑）。我是 i5-12400F + 16G DDR4 3200MHz。
 
 可以用文档中提供的脚本快速检查软件需求。我用的发行版是 [Arch](https://github.com/yuk7/ArchWSL)，我记得装上后没有进行别的操作，安装 `base-devel` 和 `python` 之后就满足要求了。不过别的发行版软件包组名字可能不同，你也可以直接安装脚本提示缺少的包。
 
@@ -174,7 +174,7 @@ Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新
 
 按照文档上给的步骤操作就行，需要注意的就是给 lfs 用户创建 `.bashrc` 的时候 `LFS` 变量值要换成自己的挂载点。
 
-`MAKEFLAGS` 里面用的核数先设了 `-j6`。
+`MAKEFLAGS` 里面用的核数先设了 `-j6`，其实直接 `-j$(nproc)` 用上所有核也行。
 
 ## Toolchain
 
@@ -230,3 +230,92 @@ sys     1m20.544s
 后面的编译步骤按文档上面的来就行。
 
 ## Chroot 环境
+
+这里需要用 `root` 用户。接着按照文档把 `$LFS` 下面的一堆目录转移给 `root`，准备 `chroot` 环境需要的虚拟内核文件系统。
+
+进入 `chroot` 环境！
+
+```bash
+chroot "$LFS" /usr/bin/env -i   \
+    HOME=/root                  \
+    TERM="$TERM"                \
+    PS1='(lfs chroot) \u:\w\$ ' \
+    PATH=/usr/bin:/usr/sbin     \
+    MAKEFLAGS="-j$(nproc)"      \
+    TESTSUITEFLAGS="-j$(nproc)" \
+    /bin/bash --login
+(lfs chroot) I have no name!:/#
+```
+
+`bash` 的提示符显示 `I have no name!`，这是因为新的环境里面还没有 `/etc/passwd`，找不到 `uid` 对应的名字。（所以 `uid` 才是决定用户身份的东西。）
+
+另外，在 `chroot` 环境编译的时候中就不用管 `$LFS` 了，因为根目录已经成了之前 `$LFS` 指定的位置，不会再涉及宿主系统的文件了。
+
+### 清理和备份
+
+清理主要是去掉一些不需要的文档和库，此外 `/tools` 也可以删掉，见 [Chapter 7.13](https://www.linuxfromscratch.org/lfs/view/stable/chapter07/cleanup.html)。
+
+```bash
+rm -rf /usr/share/{info,man,doc}/*
+find /usr/{lib,libexec} -name \*.la -delete
+rm -rf /tools
+```
+退出 `chroot` 环境，卸载虚拟文件系统：
+
+```bash
+exit
+logout
+
+# root，现在最好检查下 $LFS
+echo $LFS
+/mnt/wsl/vhd-lfs
+
+mountpoint -q $LFS/dev/shm && umount $LFS/dev/shm
+umount $LFS/dev/pts
+umount $LFS/{sys,proc,run,dev}
+```
+
+备份：
+
+```bash
+cd $LFS
+tar -cJpf /mnt/c/Users/charl/MyTools/ArchWSL/lfs-temp-tools-12.1.tar.xz .
+```
+
+压缩文件用了两三分钟。想更快的话，可以参考 [Vinfall 的笔记](https://blog.vinfall.com/posts/2022/09/lfs/#%E5%A4%87%E4%BB%BD)。
+
+如果需要还原，一定要注意，别把宿主系统给删掉了。
+
+## 构建 LFS
+
+由于之前备份系统退出了 `chroot`，现在需要重新挂载虚拟文件系统并进入 `chroot`：
+
+```bash
+mount -v --bind /dev $LFS/dev
+
+mount -vt devpts devpts -o gid=5,mode=0620 $LFS/dev/pts
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+mount -vt tmpfs tmpfs $LFS/run
+
+if [ -h $LFS/dev/shm ]; then
+  install -v -d -m 1777 $LFS$(realpath /dev/shm)
+else
+  mount -vt tmpfs -o nosuid,nodev tmpfs $LFS/dev/shm
+fi
+
+chroot "$LFS" /usr/bin/env -i   \
+    HOME=/root                  \
+    TERM="$TERM"                \
+    PS1='(lfs chroot) \u:\w\$ ' \
+    PATH=/usr/bin:/usr/sbin     \
+    MAKEFLAGS="-j$(nproc)"      \
+    TESTSUITEFLAGS="-j$(nproc)" \
+    /bin/bash --login
+```
+
+安装 `glibc` 的时候需要时区数据，创建 `/etc/localtime` 的时候，北京时间就是用 `Asia/Shanghai`：
+
+```bash
+ln -sfv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
