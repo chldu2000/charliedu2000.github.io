@@ -6,6 +6,7 @@ updated: 2024-04-07 00:23:38
 tags:
   - Linux
   - LFS
+  - WSL
 categories:
   - 快去学习
 excerpt_type: html
