@@ -13,7 +13,7 @@ tags:
 
 ## 更新游戏
 
-更新游戏的时候要用 `steam` 用户运行 `steamcmd`，脚本里面需要 `su steam -c` 可以把后续的命令执行者变为 `steam`，不加 `-c` 的话切换用户之后命令无法直接生效。
+更新游戏的时候要用 `steam` 用户运行 `steamcmd`，脚本里面需要 `su steam -c` 把后续的命令执行者变为 `steam`，执行完毕后切换回原来的用户。不加 `-c` 的话你会发现 `su` 之后脚本就停了，`exit` 之后才会以原来的用户继续执行，但这跟我们预期的效果不一样。
 
 可以参考的升级脚本：
 
@@ -32,7 +32,7 @@ echo "Start Pal-World service"
 systemctl start palworld
 ```
 
-里面的 app id 可以换成别的，可以用于更新其他游戏。
+里面的 service 和 app id 可以换成别的，可以用于更新其他游戏。
 
 ## 连接超时、连上一会儿就掉线
 
