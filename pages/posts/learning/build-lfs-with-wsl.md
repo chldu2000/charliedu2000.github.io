@@ -320,3 +320,23 @@ chroot "$LFS" /usr/bin/env -i   \
 ```bash
 ln -sfv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
+
+安装 `binutils` 的时候下面的错误可以忽略：
+
+```bash
+make -k check
+
+grep '^FAIL:' $(find -name '*.log')
+./gold/testsuite/test-suite.log:FAIL: weak_undef_test
+./gold/testsuite/test-suite.log:FAIL: initpri3a
+./gold/testsuite/test-suite.log:FAIL: script_test_1
+./gold/testsuite/test-suite.log:FAIL: script_test_2
+./gold/testsuite/test-suite.log:FAIL: justsyms
+./gold/testsuite/test-suite.log:FAIL: justsyms_exec
+./gold/testsuite/test-suite.log:FAIL: binary_test
+./gold/testsuite/test-suite.log:FAIL: script_test_3
+./gold/testsuite/test-suite.log:FAIL: tls_phdrs_script_test
+./gold/testsuite/test-suite.log:FAIL: script_test_12i
+./gold/testsuite/test-suite.log:FAIL: incremental_test_2
+./gold/testsuite/test-suite.log:FAIL: incremental_test_5
+```

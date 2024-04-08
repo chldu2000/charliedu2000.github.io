@@ -2,7 +2,7 @@
 layout: post
 title: 幻兽帕鲁服务器踩坑
 date: 2024-04-07 16:35:10
-update: 2024-04-07 16:35:10
+updated: 2024-04-07 16:35:10
 categories:
   - 玩玩游戏
 tags:
