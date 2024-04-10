@@ -159,6 +159,8 @@ Device     Start      End  Sectors Size Type
 
 Linux 重启（当然对于 WSL 来说就是 Windows 重启）之后需要重新挂载分区，更糟的是，在 WSL 中，自己创建的挂载点重启后会消失，所以编辑 `/etc/fstab` 实现自动挂载的方法就不能用了。
 
+*后来发现 WSL 的 `/etc/fstab` 应该是自动生成的，这个方法从根上就走不通。*
+
 另外，Windows 重启之后还会分离 VHD，需要到磁盘管理再附加上去才能拿到磁盘标识并挂载。幸好我的 WSL（不是指发行版）是在微软商店装的，可以直接挂载 VHD 文件：
 
 ```powershell
@@ -317,17 +319,26 @@ chroot "$LFS" /usr/bin/env -i   \
 
 有一些软件文档会提示最好不要跳过测试步骤，记得注意一下。
 
-解压的时候注意大小写，比如 `python` 的包名就是 `Python-3.12.2.tar.xz`，我用小写找了半天只能找到文档……
+解压的时候注意大小写，以下几个大写字母开头的：
 
-安装 `glibc` 的时候需要时区数据，创建 `/etc/localtime` 的时候，北京时间就直接用 `Asia/Shanghai`：
+```bash
+Jinja2-3.1.3.tar.gz
+MarkupSafe-2.1.5.tar.gz
+Python-3.12.2.tar.xz
+XML-Parser-2.47.tar.gz
+```
+
+8.5 安装 `glibc` 的时候需要时区数据，创建 `/etc/localtime` 的时候，北京时间就直接用 `Asia/Shanghai`：
 
 ```bash
 ln -sfv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
 
+（由于我还没走完整个过程，所以这一段仅供参考。）8.63 `grub`。WSL 并不依靠 `grub` 来启动，应该可以跳过。
+
 ### 测试相关
 
-安装 `binutils` 的时候下面的错误可以忽略：
+8.19 安装 `binutils` 的时候下面的错误可以忽略：
 
 ```bash
 make -k check
@@ -347,7 +358,7 @@ grep '^FAIL:' $(find -name '*.log')
 ./gold/testsuite/test-suite.log:FAIL: incremental_test_5
 ```
 
-`gcc` 的测试的确是地狱级别，用 `su tester -c "PATH=$PATH make -k -j12 check"` 跑了 50 分钟……还好测试结果和文档里写的一样，那就没什么问题。
+8.28 `gcc` 的测试的确是地狱级别，用 `su tester -c "PATH=$PATH make -k -j12 check"` 跑了 50 分钟……还好测试结果和文档里写的一样，那就没什么问题。
 
 > Eight gcc tests (out of over 185,000): `pr56837.c` and seven tests in the `analyzer` directory are known to fail. One libstdc++ test (out of over 15000), `copy.cc`, is known to fail. For g++, 21 tests (out of approximately 250,000): 14 “AddressSanitizer*” tests and 7 `interception-malloc-test-1.C` tests, are known to fail. Additionally, several tests in the `vect` directory are known to fail if the hardware does not support AVX.
 > 
@@ -478,8 +489,45 @@ true
 
 中间还有一些软件可能出现零星的测试失败，参考 LFS 文档里面对应的部分，如果文档提到了就可以忽略，否则就得再想办法补救了。
 
-### WSL 可以跳过的步骤（待验证）
+## 系统配置
 
-由于我还没走完整个过程，所以这一部分仅供参考。
+这一部分主要参考 [Vinfall 的笔记](https://blog.vinfall.com/posts/2022/09/lfs/#%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F)。
 
-WSL 并不依靠 `grub` 来启动，应该可以跳过。
+9.5.1 网络接口配置，用于 WSL 就注释掉 IP 等设置。
+
+```bash
+(lfs chroot) root:/etc/sysconfig# cat ifconfig.eth0
+ONBOOT=yes
+IFACE=eth0
+SERVICE=ipv4-static
+# IP=192.168.1.2
+# GATEWAY=192.168.1.1
+# PREFIX=24
+# BROADCAST=192.168.1.255
+```
+
+9.5.2 到 9.5.4 的文件 WSL 会生成，跳过。
+
+9.6.4 系统时钟，运行 ` hwclock --localtime --show`：
+
+```bash
+# 实际时间是 11 号的 0:17
+hwclock --localtime --show
+2024-04-10 16:17:12.984858+08:00
+```
+
+应该是表示硬件时钟被设为 UTC 时间，创建 `/etc/sysconfig/clock`：
+
+```bash
+cat > /etc/sysconfig/clock << "EOF"
+# Begin /etc/sysconfig/clock
+
+UTC=1
+
+# Set this to any options you might need to give to hwclock,
+# such as machine hardware clock type for Alphas.
+CLOCKPARAMS=
+
+# End /etc/sysconfig/clock
+EOF
+```
