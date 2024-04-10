@@ -232,7 +232,7 @@ sys     1m20.544s
 
 ## Chroot 环境
 
-这里需要用 `root` 用户。接着按照文档把 `$LFS` 下面的一堆目录转移给 `root`，准备 `chroot` 环境需要的虚拟内核文件系统。
+这里需要用 `root` 用户。接着按照[文档](https://www.linuxfromscratch.org/lfs/view/stable/chapter07/changingowner.html)把 `$LFS` 下面的一堆目录转移给 `root`，准备 `chroot` 环境需要的虚拟内核文件系统。
 
 进入 `chroot` 环境！
 
@@ -315,11 +315,19 @@ chroot "$LFS" /usr/bin/env -i   \
     /bin/bash --login
 ```
 
-安装 `glibc` 的时候需要时区数据，创建 `/etc/localtime` 的时候，北京时间就是用 `Asia/Shanghai`：
+有一些软件文档会提示最好不要跳过测试步骤，记得注意一下。
+
+解压的时候注意大小写，比如 `python` 的包名就是 `Python-3.12.2.tar.xz`，我用小写找了半天只能找到文档……
+
+安装 `glibc` 的时候需要时区数据，创建 `/etc/localtime` 的时候，北京时间就直接用 `Asia/Shanghai`：
 
 ```bash
 ln -sfv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
+
+WSL 并不依靠 `grub` 来启动，应该可以跳过。
+
+### 测试相关
 
 安装 `binutils` 的时候下面的错误可以忽略：
 
@@ -340,3 +348,134 @@ grep '^FAIL:' $(find -name '*.log')
 ./gold/testsuite/test-suite.log:FAIL: incremental_test_2
 ./gold/testsuite/test-suite.log:FAIL: incremental_test_5
 ```
+
+`gcc` 的测试的确是地狱级别，用 `su tester -c "PATH=$PATH make -k -j12 check"` 跑了 50 分钟……还好测试结果和文档里写的一样，那就没什么问题。
+
+> Eight gcc tests (out of over 185,000): `pr56837.c` and seven tests in the `analyzer` directory are known to fail. One libstdc++ test (out of over 15000), `copy.cc`, is known to fail. For g++, 21 tests (out of approximately 250,000): 14 “AddressSanitizer*” tests and 7 `interception-malloc-test-1.C` tests, are known to fail. Additionally, several tests in the `vect` directory are known to fail if the hardware does not support AVX.
+> 
+> A few unexpected failures cannot always be avoided. The GCC developers are usually aware of these issues, but have not resolved them yet. Unless the test results are vastly different from those at the above URL, it is safe to continue.
+
+```bash
+(lfs chroot) root:/sources/gcc-13.2.0/build# ../contrib/test_summary
+cat <<'EOF' |
+LAST_UPDATED: Obtained from git: releases/gcc-13.2.0 revision c891d8dc23e1a46ad9f3e757d09e57b500d40044
+
+Native configuration is x86_64-pc-linux-gnu
+
+                === g++ tests ===
+
+
+Running target unix
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array + 3, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array - 1, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array, NULL, 36) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtollOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array + 3, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array - 1, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array, NULL, 36) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/asan_test.C   -O2  AddressSanitizer_StrtolOOBTest Strtol(array, NULL, 0) execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O0  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O1  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O2  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O3 -g  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -Os  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O2 -flto -fno-use-linker-plugin -flto-partition=none  execution test
+FAIL: g++.dg/asan/interception-malloc-test-1.C   -O2 -flto -fuse-linker-plugin -fno-fat-lto-objects  execution test
+
+                === g++ Summary ===
+
+# of expected passes            237387
+# of unexpected failures        21
+# of expected failures          2071
+# of unsupported tests          10456
+/sources/gcc-13.2.0/build/gcc/xg++  version 13.2.0 (GCC)
+
+                === gcc tests ===
+
+
+Running target unix
+FAIL: gcc.dg/analyzer/data-model-4.c (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -O0  (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -O1  (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -O2  (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -O3 -g  (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -Os  (test for excess errors)
+FAIL: gcc.dg/analyzer/torture/conftest-1.c   -O2 -flto -fno-use-linker-plugin -flto-partition=none  (test for excess errors)
+FAIL: gcc.dg/pr56837.c scan-tree-dump-times optimized "memset ..c, 68, 16384.;" 1
+
+                === gcc Summary ===
+
+# of expected passes            184920
+# of unexpected failures        8
+# of expected failures          1436
+# of unsupported tests          2461
+/sources/gcc-13.2.0/build/gcc/xgcc  version 13.2.0 (GCC)
+
+                === libatomic tests ===
+
+
+Running target unix
+
+                === libatomic Summary ===
+
+# of expected passes            54
+                === libgomp tests ===
+
+
+Running target unix
+
+                === libgomp Summary ===
+
+# of expected passes            5118
+# of expected failures          32
+# of unsupported tests          355
+                === libitm tests ===
+
+
+Running target unix
+
+                === libitm Summary ===
+
+# of expected passes            44
+# of expected failures          3
+# of unsupported tests          1
+                === libstdc++ tests ===
+
+
+Running target unix
+FAIL: 23_containers/vector/bool/allocator/copy.cc (test for excess errors)
+
+                === libstdc++ Summary ===
+
+# of expected passes            15673
+# of unexpected failures        1
+# of expected failures          106
+# of unsupported tests          383
+
+Compiler version: 13.2.0 (GCC)
+Platform: x86_64-pc-linux-gnu
+configure flags: --prefix=/usr LD=ld --enable-languages=c,c++ --enable-default-pie --enable-default-ssp --disable-multilib --disable-bootstrap --disable-fixincludes --with-system-zlib
+EOF
+Mail -s "Results for 13.2.0 (GCC) testsuite on x86_64-pc-linux-gnu" gcc-testresults@gcc.gnu.org &&
+mv /sources/gcc-13.2.0/build/./gcc/testsuite/g++/g++.sum /sources/gcc-13.2.0/build/./gcc/testsuite/g++/g++.sum.sent &&
+mv /sources/gcc-13.2.0/build/./gcc/testsuite/gcc/gcc.sum /sources/gcc-13.2.0/build/./gcc/testsuite/gcc/gcc.sum.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libatomic/testsuite/libatomic.sum /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libatomic/testsuite/libatomic.sum.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libgomp/testsuite/libgomp.sum /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libgomp/testsuite/libgomp.sum.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libitm/testsuite/libitm.sum /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libitm/testsuite/libitm.sum.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libstdc++-v3/testsuite/libstdc++.sum /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libstdc++-v3/testsuite/libstdc++.sum.sent &&
+mv /sources/gcc-13.2.0/build/./gcc/testsuite/g++/g++.log /sources/gcc-13.2.0/build/./gcc/testsuite/g++/g++.log.sent &&
+mv /sources/gcc-13.2.0/build/./gcc/testsuite/gcc/gcc.log /sources/gcc-13.2.0/build/./gcc/testsuite/gcc/gcc.log.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libatomic/testsuite/libatomic.log /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libatomic/testsuite/libatomic.log.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libgomp/testsuite/libgomp.log /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libgomp/testsuite/libgomp.log.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libitm/testsuite/libitm.log /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libitm/testsuite/libitm.log.sent &&
+mv /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libstdc++-v3/testsuite/libstdc++.log /sources/gcc-13.2.0/build/./x86_64-pc-linux-gnu/libstdc++-v3/testsuite/libstdc++.log.sent &&
+true
+```
+
+中间还有一些软件可能出现零星的测试失败，参考 LFS 文档里面对应的部分，如果文档提到了就可以忽略，否则就得再想办法补救了。
