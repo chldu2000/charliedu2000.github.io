@@ -116,7 +116,3 @@ int main()
     return 0;
 }
 ```
-
-
-
-[1]: https://charliedu.xyz/usr/uploads/2020/08/1737005397.png

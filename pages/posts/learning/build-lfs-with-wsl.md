@@ -325,8 +325,6 @@ chroot "$LFS" /usr/bin/env -i   \
 ln -sfv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
 
-WSL 并不依靠 `grub` 来启动，应该可以跳过。
-
 ### 测试相关
 
 安装 `binutils` 的时候下面的错误可以忽略：
@@ -479,3 +477,9 @@ true
 ```
 
 中间还有一些软件可能出现零星的测试失败，参考 LFS 文档里面对应的部分，如果文档提到了就可以忽略，否则就得再想办法补救了。
+
+### WSL 可以跳过的步骤（待验证）
+
+由于我还没走完整个过程，所以这一部分仅供参考。
+
+WSL 并不依靠 `grub` 来启动，应该可以跳过。
