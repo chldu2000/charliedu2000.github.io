@@ -2,7 +2,7 @@
 layout: post
 title: 在 WSL 上构建 LFS
 date: 2024-04-04 00:23:38
-updated: 2024-04-07 00:23:38
+updated: 2024-04-10 00:23:38
 tags:
   - Linux
   - LFS
