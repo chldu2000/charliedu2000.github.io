@@ -14,6 +14,10 @@ excerpt_type: html
 
 **In progress**
 
+犯了个错，wsl unregister 会删掉 vhd 文件。我 build 之后没备份，试着 wsl 导入然后直接启动，但是可能漏了什么东西，没成功，想着先 unregister 然后 chroot 进去检查一下。
+
+结果 unregister 完了虚拟硬盘文件没了，只能从 build 之前的地方开始了。
+
 <!-- more -->
 
 ## 参考
@@ -529,5 +533,33 @@ UTC=1
 CLOCKPARAMS=
 
 # End /etc/sysconfig/clock
+EOF
+```
+
+9.6.5 控制台确实可以不管，就算调了也不能显示 CJK 字符。
+
+`rc.site` 文件，我也就跟着改了 `distro` 和 `colored prefix`。
+
+9.7 locale
+
+```bash
+# 查看 charmap 的规范写法，防止某些程序不兼容
+LC_ALL=en_US.utf8 locale charmap
+UTF-8
+
+cat > /etc/profile << "EOF"
+# Begin /etc/profile
+
+for i in $(locale); do
+  unset ${i%=*}
+done
+
+if [[ "$TERM" = linux ]]; then
+  export LANG=C.UTF-8
+else
+  export LANG=en_US.UTF-8
+fi
+
+# End /etc/profile
 EOF
 ```
