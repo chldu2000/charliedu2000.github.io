@@ -82,7 +82,7 @@ K8s 在很长一段时间里用 Docker 作为容器运行时环境。虽然现�
 
 ### K8s 的架构
 
-![K8s架构.png](https://s2.loli.net/2024/08/04/ekiQ6X51BYGFdjI.png)
+![K8s架构.png](https://s2.loli.net/2024/08/04/YTO5Xu7wEchfdWB.png)
 
 - kuberctl：管理 K8s 环境的命令行工具
 - ApiServer：操作 K8s 资源的入口
