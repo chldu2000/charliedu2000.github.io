@@ -14,9 +14,11 @@ excerpt_type: html
 
 **In progress**
 
-犯了个错，wsl unregister 会删掉 vhd 文件。我 build 之后没备份，试着 wsl 导入然后直接启动，但是可能漏了什么东西，没成功，想着先 unregister 然后 chroot 进去检查一下。
+~~犯了个错，wsl unregister 会删掉 vhd 文件。我 build 之后没备份，试着 wsl 导入然后直接启动，但是可能漏了什么东西，没成功，想着先 unregister 然后 chroot 进去检查一下。~~
 
-结果 unregister 完了虚拟硬盘文件没了，只能从 build 之前的地方开始了。
+~~结果 unregister 完了虚拟硬盘文件没了，只能从 build 之前的地方开始了。~~
+
+中间停滞的时间太长，我看还是找时间从头做一次好了……
 
 <!-- more -->
 

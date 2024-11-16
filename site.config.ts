@@ -42,12 +42,12 @@ export default defineSiteConfig({
     //   icon: 'i-ri-douban-line',
     //   color: '#007722',
     // },
-    // {
-    //   name: '网易云音乐',
-    //   link: 'https://music.163.com/#/user/home?id=247102977',
-    //   icon: 'i-ri-netease-cloud-music-line',
-    //   color: '#C20C0C',
-    // },
+    {
+      name: '网易云音乐',
+      link: 'https://music.163.com/#/user/home?id=610609902',
+      icon: 'i-ri-netease-cloud-music-line',
+      color: '#C20C0C',
+    },
     // {
     //   name: '知乎',
     //   link: 'https://www.zhihu.com/people/yunyoujun/',
