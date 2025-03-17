@@ -78,6 +78,7 @@ declare module 'vue-router/auto-routes' {
     '/posts/things/i3wm_config_backup': RouteRecordInfo<'/posts/things/i3wm_config_backup', '/posts/things/i3wm_config_backup', Record<never, never>, Record<never, never>>,
     '/posts/things/install_air_conditioner': RouteRecordInfo<'/posts/things/install_air_conditioner', '/posts/things/install_air_conditioner', Record<never, never>, Record<never, never>>,
     '/posts/things/install_dual_os': RouteRecordInfo<'/posts/things/install_dual_os', '/posts/things/install_dual_os', Record<never, never>, Record<never, never>>,
+    '/posts/things/ninga-sound-trying-trae': RouteRecordInfo<'/posts/things/ninga-sound-trying-trae', '/posts/things/ninga-sound-trying-trae', Record<never, never>, Record<never, never>>,
     '/posts/things/some-linux-tips': RouteRecordInfo<'/posts/things/some-linux-tips', '/posts/things/some-linux-tips', Record<never, never>, Record<never, never>>,
     '/posts/writing/a_winter_day': RouteRecordInfo<'/posts/writing/a_winter_day', '/posts/writing/a_winter_day', Record<never, never>, Record<never, never>>,
     '/posts/writing/insects_awaken': RouteRecordInfo<'/posts/writing/insects_awaken', '/posts/writing/insects_awaken', Record<never, never>, Record<never, never>>,
