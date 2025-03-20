@@ -2,7 +2,7 @@
 layout: post
 title: 您吉响 - 试用 Trae
 date: 2025-03-17 14:41:00
-updated: 2024-03-17 14:41:00
+updated: 2025-03-17 14:41:00
 tags:
   - AI
 categories:
