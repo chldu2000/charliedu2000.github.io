@@ -18,7 +18,7 @@ excerpt_type: html
 
 ## 您吉响/NinGaSound
 
-[您吉响/NinGaSound](https://chldu2000.github.io/NinGa-Sound/) 是我在 Trae 的帮助下做出来的，有节拍器和吉他调音器两个功能。之后我可能随缘更新，把功能再完善一下。
+[您吉响/NinGaSound](https://afool.top/NinGa-Sound/) 是我在 Trae 的帮助下做出来的，有节拍器和吉他调音器两个功能。之后我可能随缘更新，把功能再完善一下。
 
 ## AI 编程真就那么靠谱吗
 

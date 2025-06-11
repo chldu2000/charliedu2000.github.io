@@ -30,7 +30,7 @@ color: # 代表色，格式如："#0078e7"
 ```yaml
 url: https://afool.top/
 avatar: https://afool.top/images/nekosense.jpeg
-name: 空游
+name: LooHeir
 blog: 愚人而已
 desc: 以愚者之名攀上顶峰
 color: "#00d5ff"
