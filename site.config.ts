@@ -7,7 +7,8 @@ export default defineSiteConfig({
   subtitle: '以愚者之名攀上顶峰',
   author: {
     name: 'LooHeir',
-    avatar: 'https://afool.top/images/nekosense.jpeg'
+    avatar: 'https://afool.top/images/nekosense.jpeg',
+    link: 'https://afool.top/about'
   },
   description: '我们活着',
   favicon: 'https://afool.top/afool.svg',
