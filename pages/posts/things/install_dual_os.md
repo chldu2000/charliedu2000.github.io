@@ -10,6 +10,7 @@ draft: false
 slug: "51"
 date: 2020-11-20 00:16:00
 updated: 2020-11-20 00:16:00
+excerpt_type: html
 ---
 
 >记事性质，并不是安装攻略哦……

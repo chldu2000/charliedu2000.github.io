@@ -7,6 +7,7 @@ categories:
   - 快去学习
 date: 2022-05-15 23:45:35
 updated: 2022-05-15 23:45:35
+excerpt_type: html
 ---
 
 ~~这是一篇水文。~~

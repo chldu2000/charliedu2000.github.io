@@ -7,6 +7,7 @@ tags:
   - c
 categories:
   - 快去学习
+excerpt_type: html
 ---
 
 ## 这是怎么一回事

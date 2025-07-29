@@ -6,6 +6,7 @@ draft: false
 slug: "75"
 date: 2021-05-15 00:12:00
 updated: 2021-05-15 00:12:00
+excerpt_type: html
 ---
 
 ## 这里是空调房

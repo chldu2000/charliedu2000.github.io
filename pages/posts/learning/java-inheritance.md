@@ -6,6 +6,7 @@ tags:
   - Java
 categories:
   - 快去学习
+excerpt_type: html
 ---
 
 > 不问不知道，一问才发现之前学得实在太水，好多东西都没怎么搞明白。

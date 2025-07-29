@@ -6,6 +6,7 @@ date: 2021-05-23T22:57:20+08:00
 updated: 2021-05-23T22:57:20+08:00
 draft: false
 slug: "move_to_github"
+excerpt_type: html
 ---
 
 ## 起因

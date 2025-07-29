@@ -6,6 +6,7 @@ draft: false
 slug: "74"
 date: 2021-05-14 23:52:00
 updated: 2021-05-14 23:52:00
+excerpt_type: html
 ---
 
 ## 拆掉邪恶博士的炸弹
