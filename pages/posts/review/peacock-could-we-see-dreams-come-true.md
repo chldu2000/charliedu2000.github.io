@@ -7,6 +7,7 @@ categories:
 date: 2025-07-30 06:47:38
 updated: 2025-07-30 06:47:38
 draft: true
+excerpt_type: html
 ---
 
 《孔雀》 2005
