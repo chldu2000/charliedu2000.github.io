@@ -6,7 +6,7 @@ export default defineSiteConfig({
   title: '愚人而已',
   subtitle: '以愚者之名攀上顶峰',
   author: {
-    name: 'LooHeir',
+    name: 'chldu2000',
     avatar: 'https://afool.top/images/nekosense.jpeg',
     link: 'https://afool.top/about'
   },
@@ -27,7 +27,7 @@ export default defineSiteConfig({
     // },
     {
       name: 'GitHub',
-      link: 'https://github.com/LooHeir',
+      link: 'https://github.com/chldu2000',
       icon: 'i-ri-github-line',
       color: '#6e5494',
     },
@@ -81,7 +81,7 @@ export default defineSiteConfig({
     // },
     {
       name: 'E-Mail',
-      link: 'mailto:looheir@gmail.com',
+      link: 'mailto:chldu@afool.top',
       icon: 'i-ri-mail-line',
       color: '#8E71C1',
     },

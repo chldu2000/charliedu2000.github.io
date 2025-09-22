@@ -11,7 +11,7 @@ date: 2022-08-12 20:51:45
 updated: 2022-08-12 20:51:45
 ---
 
-[Chamber](https://github.com/LooHeir/chamber) 是什么？一个自娱自乐的小玩具，非常简单的聊天工具。
+[Chamber](https://github.com/chldu2000/chamber) 是什么？一个自娱自乐的小玩具，非常简单的聊天工具。
 
 它有极其简洁的 TUI，
 
@@ -19,6 +19,6 @@ updated: 2022-08-12 20:51:45
 
 <!--more-->
 
-包含在 [MyToys](https://github.com/LooHeir/MyToys) 中~
+包含在 [MyToys](https://github.com/chldu2000/MyToys) 中~
 
 是的，这里会写我为什么写了这个小玩意以及写的时候在想什么。（好，flag 立下了。）
