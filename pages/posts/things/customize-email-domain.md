@@ -36,7 +36,7 @@ excerpt_type: html
 
 ![customize-email-address.png](https://s2.loli.net/2025/09/23/kZ3xCaMwIy7KpbR.png)
 
-创建好之后，跟着 Cloudflare 的提示，给自己的域名添加几条 `MX` 类型的 DNS 记录，接着验证一下目标地址（我这里是验证完的状态）：
+创建好之后，跟着 Cloudflare 的提示，给自己的域名添加几条 `MX` 和 `TXT` 类型的 DNS 记录，接着验证一下目标地址（我这里是验证完的状态）：
 
 ![verify-target-address.png](https://s2.loli.net/2025/09/23/wx5bKrgka3P1dfE.png)
 
