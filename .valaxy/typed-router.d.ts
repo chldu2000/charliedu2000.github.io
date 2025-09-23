@@ -76,6 +76,7 @@ declare module 'vue-router/auto-routes' {
     '/posts/review/read_kara_no_kyoukai': RouteRecordInfo<'/posts/review/read_kara_no_kyoukai', '/posts/review/read_kara_no_kyoukai', Record<never, never>, Record<never, never>>,
     '/posts/review/trying-to-analyze-dao-guan': RouteRecordInfo<'/posts/review/trying-to-analyze-dao-guan', '/posts/review/trying-to-analyze-dao-guan', Record<never, never>, Record<never, never>>,
     '/posts/things/a-toy-for-chatting-chamber': RouteRecordInfo<'/posts/things/a-toy-for-chatting-chamber', '/posts/things/a-toy-for-chatting-chamber', Record<never, never>, Record<never, never>>,
+    '/posts/things/customize-email-domain': RouteRecordInfo<'/posts/things/customize-email-domain', '/posts/things/customize-email-domain', Record<never, never>, Record<never, never>>,
     '/posts/things/i3wm_config_backup': RouteRecordInfo<'/posts/things/i3wm_config_backup', '/posts/things/i3wm_config_backup', Record<never, never>, Record<never, never>>,
     '/posts/things/install_air_conditioner': RouteRecordInfo<'/posts/things/install_air_conditioner', '/posts/things/install_air_conditioner', Record<never, never>, Record<never, never>>,
     '/posts/things/install_dual_os': RouteRecordInfo<'/posts/things/install_dual_os', '/posts/things/install_dual_os', Record<never, never>, Record<never, never>>,
