@@ -7,7 +7,7 @@ export default defineSiteConfig({
   subtitle: '以愚者之名攀上顶峰',
   author: {
     name: 'chldu2000',
-    avatar: 'https://afool.top/images/nekosense.jpeg',
+    avatar: 'https://afool.top/images/qingming-128.png',
     link: 'https://afool.top/about'
   },
   description: '我们活着',
@@ -81,7 +81,7 @@ export default defineSiteConfig({
     // },
     {
       name: 'E-Mail',
-      link: 'mailto:chldu@afool.top',
+      link: 'mailto:hi@chldu.me',
       icon: 'i-ri-mail-line',
       color: '#8E71C1',
     },
