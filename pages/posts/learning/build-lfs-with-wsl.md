@@ -10,6 +10,7 @@ tags:
 categories:
   - 快去学习
 excerpt_type: html
+draft: true
 ---
 
 **In progress**
