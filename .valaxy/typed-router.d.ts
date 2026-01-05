@@ -69,6 +69,7 @@ declare module 'vue-router/auto-routes' {
     '/posts/memory/after-two-months-in-shanghai': RouteRecordInfo<'/posts/memory/after-two-months-in-shanghai', '/posts/memory/after-two-months-in-shanghai', Record<never, never>, Record<never, never>>,
     '/posts/memory/drift-on-curves': RouteRecordInfo<'/posts/memory/drift-on-curves', '/posts/memory/drift-on-curves', Record<never, never>, Record<never, never>>,
     '/posts/memory/graduate-from-university': RouteRecordInfo<'/posts/memory/graduate-from-university', '/posts/memory/graduate-from-university', Record<never, never>, Record<never, never>>,
+    '/posts/memory/my2025': RouteRecordInfo<'/posts/memory/my2025', '/posts/memory/my2025', Record<never, never>, Record<never, never>>,
     '/posts/memory/take_ccf_examination': RouteRecordInfo<'/posts/memory/take_ccf_examination', '/posts/memory/take_ccf_examination', Record<never, never>, Record<never, never>>,
     '/posts/review/klein-no-tsubo-by-futari-okajima': RouteRecordInfo<'/posts/review/klein-no-tsubo-by-futari-okajima', '/posts/review/klein-no-tsubo-by-futari-okajima', Record<never, never>, Record<never, never>>,
     '/posts/review/peacock-could-we-see-dreams-come-true': RouteRecordInfo<'/posts/review/peacock-could-we-see-dreams-come-true', '/posts/review/peacock-could-we-see-dreams-come-true', Record<never, never>, Record<never, never>>,
