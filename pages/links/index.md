@@ -29,7 +29,7 @@ color: # 代表色，格式如："#0078e7"
 
 ```yaml
 url: https://afool.top/
-avatar: https://afool.top/images/qingming-128.png
+avatar: https://afool.top/images/avatar.png
 name: chldu2000
 blog: 愚人而已
 desc: 以愚者之名攀上顶峰

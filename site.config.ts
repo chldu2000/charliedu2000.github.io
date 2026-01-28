@@ -7,7 +7,7 @@ export default defineSiteConfig({
   subtitle: '以愚者之名攀上顶峰',
   author: {
     name: 'chldu2000',
-    avatar: 'https://afool.top/images/qingming-128.png',
+    avatar: 'https://afool.top/images/avatar.png',
     link: 'https://afool.top/about'
   },
   description: '我们活着',
